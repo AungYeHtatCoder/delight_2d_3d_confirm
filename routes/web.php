@@ -36,6 +36,8 @@ Route::get('/user_profile', [App\Http\Controllers\User\WelcomeController::class,
 Route::get('/user_fillmoney', [App\Http\Controllers\User\WelcomeController::class, 'userFillMoney']);
 Route::get('/user_login', [App\Http\Controllers\User\WelcomeController::class, 'userLogin']);
 Route::get('/user_register', [App\Http\Controllers\User\WelcomeController::class, 'userRegister']);
+Route::get('/winner_lists', [App\Http\Controllers\User\WelcomeController::class, 'winnerList']);
+
 
 
 
@@ -66,7 +68,7 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Co
     Route::get('/two-d-evening-number', [App\Http\Controllers\Admin\TwoDMorningController::class, 'EveningTwoD'])->name('eveningNumber');
 
     Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDMorningController::class, 'TwoDEveningWinner'])->name('eveningWinner');
-        Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDEveningWinnerController::class, 'TwoDEveningWinner'])->name('eveningWinner');
+    Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDEveningWinnerController::class, 'TwoDEveningWinner'])->name('eveningWinner');
 
     Route::get('profile/fill_money', [ProfileController::class, 'fillmoney']);
     // kpay fill money get route

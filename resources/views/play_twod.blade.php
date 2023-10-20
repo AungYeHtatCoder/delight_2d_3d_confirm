@@ -88,48 +88,49 @@
 </style>
 @endsection
 @section('content')
-<div class="row align-items-center">
-  <div class="col-lg-10 mx-auto">
-    <div class="row justify-content-center">
-      <div class="col-md-11">
-        <div class="info">
-          <div class="icon icon-sm">
-            {{-- 1 --}}
-          </div>
-          <div class="d-flex">
-            <h5 class="font-weight-bolder mt-3">Delight 2D - {{ Auth::user()->name }} 's account balance -
-              <span id="userBalance" data-balance="{{ Auth::user()->balance }}">{{ Auth::user()->balance }} MMK</span>
-            </h5>
-            <div class="mt-3 ms-4">
-              <a href="{{ url('/user_profile') }}" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-md-0">Fill
-                Balance</a>
+<div class="container">
+  <div class="row align-items-center">
+    <div class="col-lg-10 mx-auto">
+      <div class="row justify-content-center">
+        <div class="col-md-11">
+          <div class="info">
+            <div class="icon icon-sm">
+              {{-- 1 --}}
             </div>
-          </div>
+            <div class="d-flex">
+              <h5 class="font-weight-bolder mt-3">Delight 2D - {{ Auth::user()->name }} 's account balance -
+                <span id="userBalance" data-balance="{{ Auth::user()->balance }}">{{ Auth::user()->balance }} MMK</span>
+              </h5>
+              <div class="mt-3 ms-4">
+                <a href="{{ url('/user_profile') }}" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-md-0">Fill
+                  Balance</a>
+              </div>
+            </div>
 
-          <div class="scrollable-container mt-2">
-            @foreach($twoDigits->chunk(5) as $chunk)
-            <div class="row beauty">
-              @foreach($chunk as $digit)
-              @php
-              $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
-              ->where('two_digit_id', $digit->id)
-              ->sum('sub_amount');
-              @endphp
+            <div class="scrollable-container mt-2">
+              @foreach($twoDigits->chunk(5) as $chunk)
+              <div class="row beauty">
+                @foreach($chunk as $digit)
+                @php
+                $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+                ->where('two_digit_id', $digit->id)
+                ->sum('sub_amount');
+                @endphp
 
-              @if($totalBetAmountForTwoDigit < 5000) <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
+                @if($totalBetAmountForTwoDigit < 5000) <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
+                  {{ $digit->two_digit }}
+              </div>
+              @else
+              <div class="col-2 text-center digit disabled" style="background-color: {{ 'javascript:getRandomColor();' }}" onclick="alert('This two digit\'s amount limit is full.')">
                 {{ $digit->two_digit }}
+              </div>
+              @endif
+              @endforeach
             </div>
-            @else
-            <div class="col-2 text-center digit disabled" style="background-color: {{ 'javascript:getRandomColor();' }}" onclick="alert('This two digit\'s amount limit is full.')">
-              {{ $digit->two_digit }}
-            </div>
-            @endif
             @endforeach
           </div>
-          @endforeach
-        </div>
 
-        <form action="{{ route('admin.two-d-play.store') }}" method="post">
+        <form action="{{ route('admin.two-d-lotteries.store') }}" method="post">
           @csrf
           <div class="row">
             <div class="col-md-6 mt-4">
@@ -151,13 +152,15 @@
           </div>
           <!-- Add this right above your PlayNow & Close buttons in the modal-body -->
 
-        </form>
+          </form>
+        </div>
       </div>
+
     </div>
 
   </div>
-
 </div>
+
 {{-- add more col --}}
 </div>
 @endsection

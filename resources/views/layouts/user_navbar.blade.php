@@ -13,12 +13,38 @@
               <span class="navbar-toggler-bar bar3"></span>
             </span>
           </button>
+          <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
+            <ul class="navbar-nav navbar-nav-hover ms-lg-12 ps-lg-5 w-100">
+              <li class="nav-item dropdown dropdown-hover mx-2">
+                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="javascript:;" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
+                  Service
+                </a>
+              </li>
 
-          <div class="collapse navbar-collapse w-100 pt-3 pb-2 py-lg-0 ms-lg-12 ps-lg-5" id="navigation">
-            <ul class="navbar-nav navbar-nav-hover w-100">
-              <li class="nav-item dropdown dropdown-hover mx-2 ms-lg-5">
-                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages5" data-bs-toggle="dropdown" aria-expanded="false">
-                  <h6>Profile</h6>
+              <li class="nav-item dropdown dropdown-hover mx-2">
+                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="javascript:;" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
+                  Contact
+                </a>
+
+              </li>
+
+              <li class="nav-item dropdown dropdown-hover mx-2">
+                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="javascript:;" id="dropdownMenuDocs" data-bs-toggle="dropdown" aria-expanded="false">
+                  About
+                </a>
+              </li>
+
+              <li class="nav-item my-auto ms-3 ms-lg-0">
+                <a href="{{ url('/winner_lists') }}" class="btn btn-sm btn-outline-primary btn-round mb-0 me-1 mt-2 mt-md-0">Winner Lists</a>
+              </li>
+              <li class="nav-item my-auto ms-3 ms-lg-0">
+
+                <a href="{{ route('admin.play-twod.index') }}" class="btn btn-sm  bg-gradient-primary  btn-round mb-0 me-1 mt-2 mt-md-0">Play Now</a>
+
+              </li>
+              <li class="nav-item dropdown dropdown-hover ms-2 ms-lg-0">
+                <a href="{{ url('/user_profile') }}" class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages5" data-bs-toggle="dropdown" aria-expanded="false">
+                  Profile
                   <img src="{{ asset('user_app/assets/img/down-arrow-dark.svg') }}" alt="down-arrow" class="arrow ms-1">
                 </a>
                 <div class="dropdown-menu dropdown-menu-animation dropdown-md p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages5">
@@ -26,7 +52,7 @@
                     <a href="{{ url('/user_register') }}" class="dropdown-item border-radius-md">
                       <span class="ps-3">Register</span>
                     </a>
-                    <a href="{{ route('login') }}" class="dropdown-item border-radius-md">
+                    <a href="{{ url('/user_login') }}" class="dropdown-item border-radius-md">
                       <span class="ps-3">Log In</span>
                     </a>
                     <a href="../../pages/author.html" class="dropdown-item border-radius-md">
@@ -47,20 +73,6 @@
               </li>
             </ul>
           </div>
-
-          <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
-            <ul class="navbar-nav navbar-nav-hover ms-lg-12 ps-lg-5 w-100 ml-auto">
-              <!-- <li class="nav-item my-auto ms-3 ms-lg-0">
-        <a href="https://www.creative-tim.com/builder?ref=navbar-soft-design-system"
-         class="btn btn-sm btn-outline-primary btn-round mb-0 me-1 mt-2 mt-md-0">Online Builder</a>
-       </li> -->
-              <!-- <li class="nav-item my-auto ms-3 ms-lg-0 ms-auto">
-        <a href="https://www.creative-tim.com/product/soft-ui-design-system-pro"
-         class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-2 mt-md-0">Fill Balance</a>
-       </li> -->
-            </ul>
-          </div>
-
         </div>
       </nav>
       <!-- End Navbar -->

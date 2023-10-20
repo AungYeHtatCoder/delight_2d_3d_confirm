@@ -7,7 +7,7 @@
  @include('layouts.user_header')
  {{-- @include('layouts.show_user_count') --}}
  <section>
-  <div class="container">
+  <div class="">
    @yield('content')
   </div>
  </section>

@@ -202,4 +202,9 @@ class WelcomeController extends Controller
     {
         return view('user_register');
     }
+
+    public function winnerList()
+    {
+        return view('winner_lists');
+    }
 }

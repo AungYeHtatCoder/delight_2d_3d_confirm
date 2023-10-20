@@ -10,6 +10,8 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
 use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
+
 class CheckForMorningWinners implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
@@ -25,6 +27,50 @@ class CheckForMorningWinners implements ShouldQueue
     {
         $this->twodWiner = $twodWiner;
     }
+
+
+// public function handle()
+// {
+//     $currentHour = Carbon::now()->hour;
+
+//     // Morning Session Prize Distribution
+//     if ($currentHour >= 12 && $currentHour < 14) {
+//         $this->distributePrizeForSession('morning');
+//     }
+
+//     // Evening Session Prize Distribution
+//     if ($currentHour >= 16 && $currentHour < 18) {
+//         $this->distributePrizeForSession('evening');
+//     }
+// }
+
+// protected function distributePrizeForSession($session)
+// {
+//     $winningEntries = DB::table('lottery_two_digit_pivot')
+//         ->where('two_digit_id', $this->twodWiner->prize_no)
+//         ->where('prize_sent', 0)
+//         ->get();
+
+//     foreach ($winningEntries as $entry) {
+//         DB::transaction(function () use ($entry, $session) {
+//             $lottery = Lottery::findOrFail($entry->lottery_id);
+
+//             if ($lottery->session == $session) {
+//                 // Update user's balance
+//                 $user = $lottery->user;
+//                 $user->balance += $entry->sub_amount * 85;  // Update based on your prize calculation
+//                 $user->save();
+
+//                 // Update prize_sent in pivot
+//                 $methodName = 'twoDigits' . ucfirst($session);
+//                 $lottery->$methodName()->updateExistingPivot($entry->two_digit_id, ['prize_sent' => 1]);
+//             }
+//         });
+//     }
+// }
+
+
+
 
     public function handle()
     {

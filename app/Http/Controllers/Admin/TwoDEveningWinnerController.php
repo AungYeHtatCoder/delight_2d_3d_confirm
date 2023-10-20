@@ -17,7 +17,7 @@ class TwoDEveningWinnerController extends Controller
 {
     $lotteries = Lottery::with('twoDigitsEvening')->get();
     $prize_no_afternoon = TwodWiner::whereDate('created_at', Carbon::today())
-                                   ->whereBetween('created_at', [Carbon::now()->startOfDay()->addHours(12), Carbon::now()->startOfDay()->addHours(18)])
+                                   ->whereBetween('created_at', [Carbon::now()->startOfDay()->addHours(12), Carbon::now()->startOfDay()->addHours(23)])
                                    ->orderBy('id', 'desc')
                                    ->first();
     $prize_no = TwodWiner::whereDate('created_at', Carbon::today())->orderBy('id', 'desc')->first();

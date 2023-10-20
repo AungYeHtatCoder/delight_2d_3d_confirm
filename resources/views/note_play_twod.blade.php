@@ -107,27 +107,31 @@
           </div>
 
           <div class="scrollable-container mt-2">
-            @foreach($twoDigits->chunk(5) as $chunk)
-            <div class="row beauty">
-              @foreach($chunk as $digit)
-              @php
-              $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
-              ->where('two_digit_id', $digit->id)
-              ->sum('sub_amount');
-              @endphp
+    @foreach($twoDigits->chunk(5) as $chunk)
+    <div class="row beauty">
+        @foreach($chunk as $digit)
+        @php
+        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+        ->where('two_digit_id', $digit->id)
+        ->sum('sub_amount');
+        @endphp
 
-              @if($totalBetAmountForTwoDigit < 5000) <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
-                {{ $digit->two_digit }}
-            </div>
-            @else
-            <div class="col-2 text-center digit disabled" style="background-color: {{ 'javascript:getRandomColor();' }}" onclick="alert('This two digit\'s amount limit is full.')">
-              {{ $digit->two_digit }}
-            </div>
-            @endif
-            @endforeach
-          </div>
-          @endforeach
+        @if($totalBetAmountForTwoDigit < 5000)
+        <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
+            {{ $digit->two_digit }} 
+            <small class="d-block mt-1" style="font-size: 10px">ထိုးနိုင်သောပမာဏ - {{ $remainingAmounts[$digit->id] }}</small>
         </div>
+        @else
+        <div class="col-2 text-center digit disabled" style="background-color: {{ 'javascript:getRandomColor();' }}" onclick="showLimitFullAlert()">
+    {{ $digit->two_digit }}
+</div>
+
+        @endif
+        @endforeach
+    </div>
+    @endforeach
+</div>
+
 
         <form action="{{ route('admin.two-d-play.store') }}" method="post">
           @csrf
@@ -165,6 +169,14 @@
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script>
+ function showLimitFullAlert() {
+    Swal.fire({
+        icon: 'info',
+        title: 'Limit Reached',
+        text: 'This two digit\'s amount limit is full.'
+    });
+}
+
   function selectDigit(num, element) {
     const selectedInput = document.getElementById('selected_digits');
     const amountInputsDiv = document.getElementById('amountInputs');

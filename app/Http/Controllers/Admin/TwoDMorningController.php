@@ -9,6 +9,7 @@ use App\Models\Admin\TwodWiner;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
+
 class TwoDMorningController extends Controller
 {
     /**
@@ -36,6 +37,12 @@ class TwoDMorningController extends Controller
 
 public function EveningTwoD()
 {
+    // Check if the current day is a playing day
+    $playDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+    if (!in_array(strtolower(date('l')), $playDays)) {
+        // Return an error or a message that today is not a playing day
+        return redirect()->back()->with('error', 'Today is not a playing day.');
+    }
     // Retrieve lotteries between 6am and 12pm where the associated LotteryMatch is active
     $lotteries = Lottery::whereHas('lotteryMatch', function ($query) {
         $query->where('is_active', true);
@@ -45,6 +52,7 @@ public function EveningTwoD()
                                  ->orderBy('id', 'desc')
                                   ->first();
     $prize_no = TwodWiner::whereDate('created_at', Carbon::today())->orderBy('id', 'desc')->first();
+    
 
     // Pass the retrieved data to the view
     return view('admin.two_d.two_d_evening_play_index', [
@@ -102,6 +110,55 @@ public function TwoDEveningWinner()
 
 // SendToAccBalanceUpdate 
 
+public function update(Request $request, $lotteryId)
+{
+    // Validation
+    $validated = $request->validate([
+        'lottery_id' => 'required|exists:lotteries,id',
+        'two_digit_id' => 'required|exists:two_digits,id',
+        'amount' => 'required|integer'
+    ]);
+
+    $currentTime = Carbon::now();
+    $isMorningSession = $currentTime->hour >= 6 && $currentTime->hour < 12; // 6 am to 12 pm
+    $isEveningSession = ($currentTime->hour > 12 && $currentTime->hour < 18) || ($currentTime->hour == 12 && $currentTime->minute >= 30); // 12:30 pm to 6 pm
+
+    // If neither morning nor evening session, exit early
+    if (!$isMorningSession && !$isEveningSession) {
+        return redirect()->back()->with('error', 'Outside of lottery sessions.');
+    }
+
+    try {
+        // Using DB::transaction to wrap our logic
+        DB::transaction(function () use ($request, $lotteryId, $isMorningSession) {
+            // Find the lottery entry
+            $lottery = Lottery::findOrFail($lotteryId);
+
+            // Determine which relation to use based on the current session
+            $relation = $isMorningSession ? $lottery->twoDigitsMorning() : $lottery->twoDigitsEvening();
+
+            // If prize has already been sent, throw an exception
+            if ($relation->wherePivot('prize_sent', 1)->count() > 0) {
+                throw new \Exception('Prize already sent!');
+            }
+
+            // Update the user's balance only if they bet during the current session
+            $user = $lottery->user;
+            $user->balance += $request->amount;
+            $user->save();
+
+            // Mark the prize as sent in the pivot table
+            $relation->updateExistingPivot($request->two_digit_id, ['prize_sent' => 1]);
+        });
+
+        // If everything goes smoothly and there are no exceptions, then the code outside the transaction will execute
+        return redirect()->back()->with('message', 'Amount sent successfully!');
+
+    } catch (\Exception $e) {
+        // If there's an exception, we'll catch it here and handle it, like returning with an error message
+        return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+    }
+}
 
 //     public function index()
 // {
@@ -162,71 +219,45 @@ public function TwoDEveningWinner()
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, $lotteryId)
-{
-    // Validation
-    $validated = $request->validate([
-        'lottery_id' => 'required|exists:lotteries,id',
-        'two_digit_id' => 'required|exists:two_digits,id',
-        'amount' => 'required|integer'
-    ]);
+//     public function update(Request $request, $lotteryId)
+// {
+//     // Validation
+//     $validated = $request->validate([
+//         'lottery_id' => 'required|exists:lotteries,id',
+//         'two_digit_id' => 'required|exists:two_digits,id',
+//         'amount' => 'required|integer'
+//     ]);
 
-     try {
-        // Using DB::transaction to wrap our logic
-        DB::transaction(function () use ($request, $lotteryId) {
-            // Find the lottery entry
-            $lottery = Lottery::findOrFail($lotteryId);
+//      try {
+//         // Using DB::transaction to wrap our logic
+//         DB::transaction(function () use ($request, $lotteryId) {
+//             // Find the lottery entry
+//             $lottery = Lottery::findOrFail($lotteryId);
 
-            // if prize has already been sent, throw an exception
-            if ($lottery->twoDigitsMorning()->wherePivot('prize_sent', 1)->count() > 0) {
-                throw new \Exception('Prize already sent!');
-            }
+//             // if prize has already been sent, throw an exception
+//             if ($lottery->twoDigitsMorning()->wherePivot('prize_sent', 1)->count() > 0) {
+//                 throw new \Exception('Prize already sent!');
+//             }
 
-            // Update the user's balance
-            $user = $lottery->user;
-            $user->balance += $request->amount;  // Adding the prize amount to the user's balance.
-            $user->save();
+//             // Update the user's balance
+//             $user = $lottery->user;
+//             $user->balance += $request->amount;  // Adding the prize amount to the user's balance.
+//             $user->save();
 
-            // Mark the prize as sent in the pivot table
-            $lottery->twoDigitsMorning()->updateExistingPivot($request->two_digit_id, ['prize_sent' => 1]);
-        });
+//             // Mark the prize as sent in the pivot table
+//             $lottery->twoDigitsMorning()->updateExistingPivot($request->two_digit_id, ['prize_sent' => 1]);
+//         });
 
-        // If everything goes smoothly and there are no exceptions, then the code outside the transaction will execute
-        return redirect()->back()->with('message', 'Amount sent successfully!');
+//         // If everything goes smoothly and there are no exceptions, then the code outside the transaction will execute
+//         return redirect()->back()->with('message', 'Amount sent successfully!');
 
-    } catch (\Exception $e) {
-        // If there's an exception, we'll catch it here and handle it, like returning with an error message
-        return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
-    }
+//     } catch (\Exception $e) {
+//         // If there's an exception, we'll catch it here and handle it, like returning with an error message
+//         return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
+//     }
 
-    // try {
-    //     // Using DB::transaction to wrap our logic
-    //     DB::transaction(function () use ($request, $lotteryId) {
-    //         // Find the lottery entry
-    //         $lottery = Lottery::findOrFail($lotteryId);
-
-    //         // Update the user's balance
-    //         $user = $lottery->user;
-    //         $user->balance += $request->amount;  // Adding the prize amount to the user's balance.
-    //         $user->save();
-
-    //         // Mark the prize as sent in the pivot table
-    //         $lottery->twoDigitsMorning()->updateExistingPivot($request->two_digit_id, ['prize_sent' => 1]);
-    //         // if prize sent is === 1 return with error message
-    //         if ($lottery->twoDigitsMorning()->wherePivot('prize_sent', 1)->count() > 0) {
-    //             return redirect()->back()->with('error', 'Prize already sent!');
-    //         }
-
-    //     });
-
-    //     // If everything goes smoothly and there are no exceptions, then the code outside the transaction will execute
-    //     return redirect()->back()->with('message', 'Amount sent successfully!');
-
-    // } catch (\Exception $e) {
-    //     // If there's an exception, we'll catch it here and handle it, like returning with an error message
-    //     return redirect()->back()->with('error', 'An error occurred: ' . $e->getMessage());
-    // }
-}
+    
+// }
 //    public function update(Request $request, $userId)
 // {
 //     // Validation

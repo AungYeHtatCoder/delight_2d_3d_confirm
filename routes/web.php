@@ -10,6 +10,7 @@ use App\Http\Controllers\Admin\TwoDigitController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\TwoDWinnerController;
 use App\Http\Controllers\Admin\TwoDLotteryController;
+use App\Http\Controllers\Admin\TwoDEveningWinnerController;
 
 /*
 |--------------------------------------------------------------------------
@@ -59,13 +60,14 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Co
     Route::put('/change-join-date', [ProfileController::class, 'JoinDate'])->name('addJoinDate');
     Route::resource('play-twod', PlayTwoDController::class);
     Route::resource('two-d-lotteries', TwoDigitController::class);
+    Route::post('/two-d-play', [App\Http\Controllers\Admin\TwoDPlayController::class, 'store'])->name('two-d-play.store');
     Route::resource('twod-records', TwoDLotteryController::class);
     Route::resource('tow-d-win-number', TwoDWinnerController::class);
     Route::resource('tow-d-morning-number', TwoDMorningController::class);
     Route::get('/two-d-morning-winner', [App\Http\Controllers\Admin\TwoDMorningWinnerController::class, 'TwoDMorningWinner'])->name('morningWinner');
     Route::get('/two-d-evening-number', [App\Http\Controllers\Admin\TwoDMorningController::class, 'EveningTwoD'])->name('eveningNumber');
 
-    Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDMorningController::class, 'TwoDEveningWinner'])->name('eveningWinner');
+    Route::get('/two-d-evening-winner', [TwoDEveningWinnerController::class, 'TwoDEveningWinner'])->name('eveningWinner');
         Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDEveningWinnerController::class, 'TwoDEveningWinner'])->name('eveningWinner');
 
     Route::get('profile/fill_money', [ProfileController::class, 'fillmoney']);

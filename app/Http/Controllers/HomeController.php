@@ -26,7 +26,7 @@ class HomeController extends Controller
          if (auth()->user()->hasRole('Admin')) {
         return view('admin.dashboard');
     } else {
-        return view('admin.user_dashboard');
+        return view('admin.profile.user_profile');
         }
     }
 }

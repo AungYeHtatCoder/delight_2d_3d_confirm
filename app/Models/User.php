@@ -135,7 +135,11 @@ public function twodWiners()
         return $this->belongsToMany(TwodWiner::class);
     }
 
-
+ public function balancedecrement($column, $amount = 1)
+    {
+        $this->$column = $this->$column - $amount;
+        return $this->save();
+    }
    
 
 }

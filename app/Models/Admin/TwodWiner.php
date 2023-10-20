@@ -3,6 +3,7 @@
 namespace App\Models\Admin;
 
 use App\Models\User;
+use App\Jobs\CheckForEveningWinners;
 use App\Jobs\CheckForMorningWinners;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -22,9 +23,13 @@ class TwodWiner extends Model
 protected static function booted()
 {
     static::created(function ($twodWiner) {
-        // Dispatch a job or directly call the logic to check for winners
-        CheckForMorningWinners::dispatch($twodWiner);
+        if ($twodWiner->session == 'morning') {
+            CheckForMorningWinners::dispatch($twodWiner);
+        } elseif ($twodWiner->session == 'evening') {
+            CheckForEveningWinners::dispatch($twodWiner);
+        }
     });
 }
+
 
 }

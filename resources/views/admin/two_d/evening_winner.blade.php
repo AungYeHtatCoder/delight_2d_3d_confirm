@@ -24,23 +24,27 @@
                             <h5 class="mb-0">2D Evening Winner Dashboards
                                 <span>
                                     <button type="button" class="btn btn-primary">
-                                        <span>{{ $prize_no->created_at->format('d-m-Y (l) (h:i a)') }}</span>
-                                        <span class="badge badge-warning"
-                                            style="font-size: 15px; color:white">{{ $prize_no->prize_no }}</span>
+                                        @if ($prize_no_afternoon)
+                                            <span>{{ $prize_no->created_at->format('d-m-Y (l) (h:i a)') }}</span>
+                                            <span class="badge badge-warning"
+                                                style="font-size: 15px; color:white">{{ $prize_no->prize_no }}</span>
+                                        @else
+                                            <span>No Prize Number Yet</span>
+                                        @endif
                                     </button>
                                 </span>
                             </h5>
 
                         </div>
-                        <div class="ms-auto my-auto mt-lg-0 mt-4">
+                        {{-- <div class="ms-auto my-auto mt-lg-0 mt-4">
                             <div class="ms-auto my-auto">
                                 <a href="{{ route('admin.users.create') }}"
                                     class="btn bg-gradient-primary btn-sm mb-0">+&nbsp; Create New
                                     User</a>
                                 <button class="btn btn-outline-primary btn-sm export mb-0 mt-sm-0 mt-1" data-type="csv"
                                     type="button" name="button">Export</button>
-                          </div>
-                        </div>
+                            </div>
+                        </div> --}}
                     </div>
                 </div>
                 <div class="table-responsive">
@@ -49,46 +53,50 @@
                             <th>PlayerName</th>
                             <th>Winning Two Digits</th>
                             <th>Bet Amount</th>
-                            <th>6AM-12PM Prize No</th>
+                            <th>12PM - 4:30 PM</th>
                             <th>Prize Amount</th>
                             <th>SendToAccBalance</th>
                         </thead>
                         <tbody>
                             <!-- Loop through each lottery -->
-                            @foreach ($lotteries as $lottery)
-                                <!-- Loop through each two digits for the lottery -->
-                                @foreach ($lottery->twoDigitsEvening as $twoDigit)
-                                    <!-- Check if it's a winner -->
-                                    @if ($prize_no_morning && $twoDigit->two_digit === $prize_no_morning->prize_no)
-                            <tr>
-                                <td>{{ $lottery->user->name }}</td>
-                                <td>{{ $twoDigit->two_digit }}</td>
-                                <td>{{ $twoDigit->pivot->sub_amount }}</td>
-                                <td><span class="badge badge-success">WINNER</span></td>
-                                <td>{{ $twoDigit->pivot->sub_amount * 85 }}</td>
-                                <td>
-                                    @if (!$twoDigit->pivot->prize_sent)
-                                        <form
-                                            action="{{ route('admin.tow-d-morning-number.update', $lottery->id) }}"
-                                            method="post">
-                                            @csrf
-                                            @method('PUT')
-                                            <input type="hidden" name="lottery_id" value="{{ $lottery->id }}">
-                                            <input type="hidden" name="two_digit_id"
-                                                value="{{ $twoDigit->id }}">
-                                            <input type="hidden" name="amount"
-                                                value="{{ $twoDigit->pivot->sub_amount * 85 }}">
-                                            <button type="submit" class="btn btn-success">Send</button>
-                                        </form>
-                                    @else
-                                        <button type="button" class="btn btn-success" disabled>Sent</button>
-                                    @endif
-                                </td>
-                            </tr>
-                        @endif
-                    @endforeach
-                @endforeach
-            </tbody>
+@foreach ($lotteries as $lottery)
+    <!-- Loop through each two digits for the lottery -->
+    @foreach ($lottery->twoDigitsEvening as $twoDigit)
+        <!-- Check if it's a winner -->
+        @if ($prize_no_afternoon && $twoDigit->two_digit === $prize_no_afternoon->prize_no)
+            <tr>
+                <td>{{ $lottery->user->name }}</td>
+                <td>{{ $twoDigit->two_digit }}</td>
+                <td>{{ $twoDigit->pivot->sub_amount }}</td>
+                <td><span class="badge badge-success">WINNER</span></td>
+                <td>{{ $twoDigit->pivot->sub_amount * 85 }}</td>
+                <td>
+                    @if (!$twoDigit->pivot->prize_sent)
+                        {{-- <form
+                            action="{{ route('admin.tow-d-morning-number.update', $lottery->id) }}"
+                            method="post">
+                            @csrf
+                            @method('PUT')
+                            <input type="hidden" name="lottery_id" value="{{ $lottery->id }}">
+                            <input type="hidden" name="two_digit_id"
+                                value="{{ $twoDigit->id }}">
+                            <input type="hidden" name="amount"
+                                value="{{ $twoDigit->pivot->sub_amount * 85 }}">
+                            <button type="submit" class="btn btn-success">Send</button>
+                        </form> --}}
+                            <button type="submit" class="btn btn-success">ငွေလျော်ပြီး</button>
+
+                    @else
+                        <span>Prize amount is sent</span>
+                    @endif
+                </td>
+            </tr>
+                @endif
+            
+    @endforeach
+@endforeach
+
+                        </tbody>
                     </table>
                 </div>
             </div>

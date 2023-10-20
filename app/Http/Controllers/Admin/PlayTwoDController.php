@@ -18,22 +18,22 @@ class PlayTwoDController extends Controller
      */
     public function index()
 {
+    // get all two digits
     $twoDigits = TwoDigit::all();
-    // $client = new Client();
-    
-    // try {
-    //     $response = $client->request('GET', 'https://api.thaistock2d.com/live');
-    //     $data = json_decode($response->getBody(), true);
-    // } catch (RequestException $e) {
-    //     // Log the error or inform the user
-    //     $data = []; // or provide a default value
-    // }
-    // if (request()->ajax()) {
-    //     return response()->json($data);
-    // }
 
-    return view('play_twod', compact('twoDigits'));
+    // Calculate remaining amounts for each two-digit
+    $remainingAmounts = [];
+    foreach ($twoDigits as $digit) {
+        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+            ->where('two_digit_id', $digit->id)
+            ->sum('sub_amount');
+
+        $remainingAmounts[$digit->id] = 5000 - $totalBetAmountForTwoDigit; // Assuming 5000 is the session limit
+    }
+
+    return view('note_play_twod', compact('twoDigits', 'remainingAmounts'));
 }
+
 
 
     /**

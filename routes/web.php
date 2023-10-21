@@ -53,6 +53,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Co
     // Users
     Route::delete('users/destroy', [UsersController::class, 'massDestroy'])->name('users.massDestroy');
     Route::resource('users', UsersController::class);
+
+    //Banners
+    Route::resource('banners', BannerController::class);
+
+
     // profile resource rotues
     Route::resource('profiles', ProfileController::class);
     Route::put('/change-password', [ProfileController::class, 'changePassword'])->name('changePassword');

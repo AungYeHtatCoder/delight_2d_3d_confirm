@@ -113,14 +113,15 @@
   </div>
 </section>
 
-
+<!-- Banner Section Start -->
 <section style="margin-top: 50px;">
   <div class="container">
     <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
 
       <div class="carousel-inner">
-        <div class="carousel-item active fade-in">
-          <img src="{{ asset('user_app/assets/img/curved-images/curved-6.jpg') }}" class="d-block w-100 rounded" alt="..." style="max-height: 400px;">
+        @foreach($banners as $key=>$banner)
+        <div class="carousel-item {{ $loop->first ? 'active' : '' }} fade-in">
+          <img src="{{ $banner->img_url }}" class="d-block w-100 rounded" alt="..." style="max-height: 400px;">
           <div class="carousel-caption d-flex flex-column h-100 align-items-center justify-content-center">
             <div class="card home-banner">
               <div class="card-body">
@@ -132,45 +133,22 @@
             </div>
           </div>
         </div>
-        <div class="carousel-item fade-in">
-          <img src="{{ asset('user_app/assets/img/curved-images/curved-8.jpg') }}" class="d-block w-100 rounded" alt="..." style="max-height: 400px;">
-          <div class="carousel-caption d-flex flex-column h-100 align-items-center justify-content-center">
-            <div class="card home-banner">
-              <div class="card-body">
-                <h3 class="text-primary text-gradient">You Can Play</h3>
-                <h4>Delight 2D | 3D System</h4>
-                <p class="text-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. At quam doloremque cupiditate</p>
-                <a href="{{ route('admin.play-twod.index') }}" class="btn bg-gradient-primary btn-xl">PLAY NOW</a>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="carousel-item fade-in">
-          <img src="{{ asset('user_app/assets/img/curved-images/curved-10.jpg') }}" class="d-block w-100 rounded" alt="..." style="max-height: 400px;">
-          <div class="carousel-caption d-flex flex-column h-100 align-items-center justify-content-center">
-            <div class="card home-banner">
-              <div class="card-body">
-                <h3 class="text-primary text-gradient">You Can Play</h3>
-                <h4>Delight 2D | 3D System</h4>
-                <p class="text-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. At quam doloremque cupiditate</p>
-                <a href="{{ route('admin.play-twod.index') }}" class="btn bg-gradient-primary btn-xl">PLAY NOW</a>
-              </div>
-            </div>
-          </div>
-        </div>
+        @endforeach
       </div>
-      <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
+      <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Previous</span>
       </button>
       <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
         <span class="visually-hidden">Next</span>
-      </button>
+      </button> -->
     </div>
   </div>
 
 </section>
+<!-- Banner Section End -->
+
 
 <section style="margin-top: 60px;">
   <div class="container">

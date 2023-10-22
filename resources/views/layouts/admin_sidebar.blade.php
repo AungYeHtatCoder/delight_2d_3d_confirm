@@ -302,6 +302,12 @@
               <span class="sidenav-normal  ms-2  ps-1"> Balance Accept </span>
             </a>
           </li>
+           <li class="nav-item ">
+            <a class="nav-link text-white " href="{{ route('admin.CloseTwoD') }}">
+              <span class="sidenav-mini-icon"> V </span>
+              <span class="sidenav-normal  ms-2  ps-1"> CloseTwoD </span>
+            </a>
+          </li>
         </ul>
       </div>
     </li>

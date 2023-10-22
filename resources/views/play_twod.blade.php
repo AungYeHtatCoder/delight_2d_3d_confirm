@@ -134,7 +134,7 @@
               </div>
             </div>
 
-            <div class="scrollable-container mt-2">
+            <div class="scrollable-container mt-5">
               @foreach($twoDigits->chunk(5) as $chunk)
               <div class="row beauty">
                 @foreach($chunk as $digit)
@@ -156,8 +156,8 @@
             </div>
             @endforeach
           </div>
-
-        <form action="{{ route('two-d-play.StorePlayTwoD.store') }}" method="post">
+          @if($lottery_matches->is_active == 1)
+        <form action="{{ route('admin.two-d-play.store') }}" method="post">
           @csrf
           <div class="row">
             <div class="col-md-6 mt-4">
@@ -180,6 +180,12 @@
           <!-- Add this right above your PlayNow & Close buttons in the modal-body -->
 
           </form>
+          @else
+          <p>
+            <h3 class="text-center">Sorry, you can't play now. Please wait for the next round.</h3>
+          </p>
+          @endif
+
         </div>
       </div>
 

@@ -2,15 +2,17 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Controller;
+use GuzzleHttp\Client;
 use Illuminate\Http\Request;
 use App\Models\Admin\Lottery;
 use App\Models\Admin\TwoDigit;
+use App\Models\Admin\LotteryMatch;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Exception\RequestException;
+
 class PlayTwoDController extends Controller
 {
     /**
@@ -30,8 +32,9 @@ class PlayTwoDController extends Controller
 
         $remainingAmounts[$digit->id] = 5000 - $totalBetAmountForTwoDigit; // Assuming 5000 is the session limit
     }
+    $lottery_matches = LotteryMatch::where('id', 1)->whereNotNull('is_active')->first();
 
-    return view('note_play_twod', compact('twoDigits', 'remainingAmounts'));
+    return view('note_play_twod', compact('twoDigits', 'remainingAmounts', 'lottery_matches'));
 }
 
 

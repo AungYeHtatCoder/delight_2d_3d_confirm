@@ -73,9 +73,13 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Co
     Route::put('/change-kpay-no', [ProfileController::class, 'KpayNoChange'])->name('changeKpayNo');
     Route::put('/change-join-date', [ProfileController::class, 'JoinDate'])->name('addJoinDate');
     Route::resource('play-twod', PlayTwoDController::class);
+    Route::post('lotteries-two-d-play', [TwoDigitController::class, 'store'])->name('StorePlayTwoD');
+
     //Route::resource('two-d-lotteries', TwoDigitController::class);
-    Route::get('/two-d-lotteries', [App\Http\Controllers\Admin\TwoDigitController::class, 'index'])->name('GetTwoDigit');
-    Route::post('/two-d-play', [App\Http\Controllers\Admin\TwoDPlayController::class, 'store'])->name('two-d-play.store');
+    //Route::get('/two-d-lotteries', [App\Http\Controllers\Admin\TwoDigitController::class, 'index'])->name('GetTwoDigit');
+    Route::post('/two-d-play', [App\Http\Controllers\Admin\TwoDigitController::class, 'store'])->name('two-d-play.store');
+    Route::get('/close-two-d', [App\Http\Controllers\Admin\CloseTwodController::class, 'index'])->name('CloseTwoD');
+    Route::put('/update-open-close-two-d', [App\Http\Controllers\Admin\CloseTwodController::class, 'update'])->name('OpenCloseTwoD');
     Route::resource('twod-records', TwoDLotteryController::class);
     Route::resource('tow-d-win-number', TwoDWinnerController::class);
     Route::resource('tow-d-morning-number', TwoDMorningController::class);
@@ -121,8 +125,8 @@ Route::get('user-profile', [ProfileController::class, 'UserProfile'])->name('Use
 
 // });
 
-Route::group(['prefix' => 'two-d-play', 'as' => 'two-d-play.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth']], function () {
-    Route::post('lotteries-two-d-play', [TwoDigitController::class, 'store'])->middleware('lottery.available')->name('StorePlayTwoD');
+// Route::group(['prefix' => 'two-d-play', 'as' => 'two-d-play.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth']], function () {
+//     Route::post('lotteries-two-d-play', [TwoDigitController::class, 'store'])->middleware('lottery.available')->name('StorePlayTwoD');
 
-    // ... any other routes you might have for this group that do not need the 'lottery.available' middleware
-});
+//     // ... any other routes you might have for this group that do not need the 'lottery.available' middleware
+// });

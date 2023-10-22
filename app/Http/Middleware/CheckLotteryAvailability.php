@@ -19,7 +19,12 @@ class CheckLotteryAvailability
     {
         //dd("Middleware triggered"); // Add this line temporarily for debugging
         $now = Carbon::now('Asia/Yangon');
+        //$now = Carbon::createFromTimestamp('your-chosen-timestamp', 'Asia/Yangon');
+        //$now = Carbon::createFromTimestamp(1671876600, 'Asia/Yangon');
+
+        dd($now);
         $day = $now->dayOfWeek;
+        //dd('Current day of week:', $day);
 
         // Define your working days: Monday is 1 and Friday is 5 in Carbon.
         $workingDays = [1, 2, 3, 4, 5];
@@ -30,10 +35,10 @@ class CheckLotteryAvailability
         }
 
         // Define the morning and evening close times.
-        $morningCloseStart = Carbon::createFromTime(11, 30);
-        $morningCloseEnd = Carbon::createFromTime(12, 0);
-        $eveningCloseStart = Carbon::createFromTime(15, 45);
-        $eveningCloseEnd = Carbon::createFromTime(21, 0);
+        $morningCloseStart = Carbon::createFromTime(11, 30, 'Asia/Yangon');
+        $morningCloseEnd = Carbon::createFromTime(12, 0, 'Asia/Yangon');
+        $eveningCloseStart = Carbon::createFromTime(15, 45, 'Asia/Yangon');
+        $eveningCloseEnd = Carbon::createFromTime(16, 0, 'Asia/Yangon');
 
         // for sunday and saturday
         // Check if current time falls within the close periods.

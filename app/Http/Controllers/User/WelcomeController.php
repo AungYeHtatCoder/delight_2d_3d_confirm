@@ -209,4 +209,14 @@ class WelcomeController extends Controller
     {
         return view('winner_lists');
     }
+
+    public function lotteryResult()
+    {
+        return view('lottery_result');
+    }
+
+    public function contact()
+    {
+        return view('contact');
+    }
 }

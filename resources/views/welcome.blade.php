@@ -2,6 +2,19 @@
 <link href="/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" rel="stylesheet">
 @section('user_styles')
 <style>
+  .result {
+    background: #82A0D8;
+  }
+
+
+  .count-down {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+  }
+
+  .start-card {
+    box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  }
+
   .home-banner {
     width: 550px;
     height: 250px;
@@ -14,63 +27,62 @@
     box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 2px 6px 2px;
   }
 
-  .fade-in {
-    animation: fadeIn 1s ease-in-out;
+  .parent-banner {
+    position: relative;
   }
 
-  @keyframes fadeIn {
-    from {
-      opacity: 0;
-    }
-
-    to {
-      opacity: 1;
-    }
-  }
-
-  @media screen and (orientation: landscape) {
-    .carousel img {
-      height: 100vh;
-    }
-  }
-
-  .custom-fab {
-    padding: 20px;
-    font-size: 30px;
-    width: 70px;
-    text-align: center;
-    text-decoration: none;
-    border-radius: 50%;
-  }
-
-  /* Add a hover effect if you want */
-  .fa-viber {
-    background: #59267c;
-    color: white;
-  }
-
-  .fa-telegram {
-    background: #229ED9;
-    color: white;
-  }
-
-  .fa-viber:hover {
-    color: #e2d4e7;
-  }
-
-  .fa-usd {
-    background: gold;
-    color: white;
+  .text-banner {
+    position: absolute;
+    top: 200;
+    left: 200;
   }
 </style>
 @endsection
 <link href="https://raw.githubusercontent.com/daneden/animate.css/master/animate.css" rel="stylesheet">
 @section('content')
-<section class="pt-3" id="count-stats">
+<header class="header-2">
+  <div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+    <div class="carousel-indicators">
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="1" aria-label="Slide 2"></button>
+      <button type="button" data-bs-target="#carouselExampleIndicators" data-bs-slide-to="2" aria-label="Slide 3"></button>
+    </div>
+    <div class="position-absolute w-100 z-index-1 bottom-0">
+      <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
+        <defs>
+          <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+        </defs>
+        <g class="">
+          <use xlink:href="#gentle-wave" x="48" y="-1" fill="rgba(255,255,255,0.40" />
+          <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.35)" />
+          <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.25)" />
+          <use xlink:href="#gentle-wave" x="48" y="8" fill="rgba(255,255,255,0.20)" />
+          <use xlink:href="#gentle-wave" x="48" y="13" fill="rgba(255,255,255,0.15)" />
+          <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95" />
+        </g>
+      </svg>
+    </div>
+    <div class="carousel-inner">
+      @foreach($banners as $key=>$banner)
+      <div class="carousel-item parent-banner {{ $loop->first ? 'active' : '' }}">
+        <img src="{{ $banner->img_url }}" class="d-block w-100" style="max-height: 500px;" alt="...">
+      </div>
+      @endforeach
+    </div>
+  </div>
+</header>
+<section class="text-banner">
+  <h3 class="text-primary text-gradient">You Can Play 2D | 3D At</h3>
+  <h4>Delight 2D | 3D System</h4>
+  <!-- <p class="text-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. At quam doloremque cupiditate</p> -->
+  <a href="{{ route('admin.play-twod.index') }}" class="btn mt-1 bg-gradient-primary btn-xl">PLAY NOW</a>
+</section>
+
+<section id="count-stats" style="margin-top: 100px; ">
   <div class="container">
     <div class="row">
-      <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur shadow-blur">
-        <div class="row">
+      <div class="col-lg-9 z-index-2 border-radius-xl mt-n10 mx-auto py-3 blur count-down" style=" padding-top: 30px;">
+        <div class="row mt-3">
           <div class="col-md-4 position-relative">
             <div class="p-3 text-center">
               <h4 class="text-gradient text-primary">
@@ -109,46 +121,81 @@
       </div> --}}
     </div>
   </div>
-  </div>
-  </div>
 </section>
 
-<!-- Banner Section Start -->
-<section style="margin-top: 50px;">
+<section class="mt-5">
   <div class="container">
-    <div id="myCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="3000">
-
-      <div class="carousel-inner">
-        @foreach($banners as $key=>$banner)
-        <div class="carousel-item {{ $loop->first ? 'active' : '' }} fade-in">
-          <img src="{{ $banner->img_url }}" class="d-block w-100 rounded" alt="..." style="max-height: 400px;">
-          <div class="carousel-caption d-flex flex-column h-100 align-items-center justify-content-center">
-            <div class="card home-banner">
-              <div class="card-body">
-                <h3 class="text-primary text-gradient">You Can Play</h3>
-                <h4>Delight 2D | 3D System</h4>
-                <p class="text-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. At quam doloremque cupiditate</p>
-                <a href="{{ route('admin.play-twod.index') }}" class="btn bg-gradient-primary btn-xl">PLAY NOW</a>
-              </div>
-            </div>
-          </div>
+    <h3 class="text-center">How To Start</h3>
+    <div class="row mt-4">
+      <div class="col-lg-4 mx-auto">
+        <div class="card mt-5 mb-5 start-card p-4">
+          <h2 style="color:#e2d4e7">01</h2>
+          <img src="{{ asset('/user_app/assets/img/lotto/get.png') }}" width="90px" height="90px" style="display: block; margin: 0 auto;">
+          <h5 class="text-center">Get Access</h5>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non accusamus labore quae laborum necessitatibus, eius dolorum,illo?</p>
         </div>
-        @endforeach
       </div>
-      <!-- <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="prev">
-        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
-      </button>
-      <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleCaptions" data-bs-slide="next">
-        <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
-      </button> -->
+      <div class="col-lg-4 mx-auto">
+        <div class="card start-card p-4">
+          <h2 style="color:#e2d4e7">02</h2>
+          <img src="{{ asset('/user_app/assets/img/lotto/lottery-icon.png') }}" width="100px" height="100px" style="display: block; margin: 0 auto;">
+          <h5 class="text-center">Choose Number</h5>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non accusamus labore quae laborum necessitatibus, eius dolorum,illo?</p>
+        </div>
+
+      </div>
+      <div class="col-lg-4 mx-auto">
+        <div class="card mt-5 start-card p-4">
+          <h2 style="color:#e2d4e7">03</h2>
+          <img src="{{ asset('/user_app/assets/img/lotto/start3.jpg') }}" width="100px" height="100px" style="display: block; margin: 0 auto;">
+          <h5 class="text-center">Win Prizes</h5>
+          <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Non accusamus labore quae laborum necessitatibus, eius dolorum,illo?</p>
+        </div>
+      </div>
     </div>
   </div>
-
 </section>
-<!-- Banner Section End -->
 
+<section class="py-sm-3" id="download-soft-ui">
+  <div class="position-relative m-3 border-radius-xl overflow-hidden result">
+    <img src="{{ asset('user_app/assets/img/shapes/waves-gray.svg')}}" alt="pattern-lines" class="position-absolute start-0 top-md-0 w-100 opacity-6">
+    <div class="container py-5 postion-relative z-index-2 position-relative">
+      <div class="row">
+        <div class="col-md-7 mx-auto text-center">
+          <h3 class="text-white mb-0">Delight 2D | 3D System</h3>
+          <h3 class="text-primary text-gradient-primary mb-4">Lottery Result</h3>
+          <p class="text-white mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure itaque quo facere, commodi voluptatibus perspiciatis placeat nihil.</p>
+          <a href="{{ url('/lottery_result') }}" class=" btn btn-primary btn-lg mb-3 mb-sm-0 ms-auto">View Result</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="my-3 mt-3">
+  <div class="container">
+    <div class="row">
+      <div class="col-md-6 col-12 my-auto">
+        <h3 class="text-gradient text-primary mb-0">You liked it and</h3>
+        <h3>Want more?</h3>
+        <p class="pe-md-5 mb-4">
+          Lorem ipsum dolor, sit amet consectetur adipisicing elit. Officia soluta corrupti velit molestias debitis quia voluptas modi delectus explicabo? Doloribus maxime sunt id itaque. Aliquam suscipit reprehenderit neque iusto, doloremque quas velit quibusdam.
+        </p>
+        <div class="github-buttons">
+          <a href="{{ url('/user_fillmoney') }}" class="btn bg-gradient-primary mb-5 mb-sm-0">Fill Money</a>
+          <div class="github-button">
+            <span></span>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-6 col-12 my-auto">
+        <a href="https://www.creative-tim.com/product/soft-ui-design-system-pro">
+          <img class="w-100 border-radius-lg shadow-lg" src="{{ asset('user_app/assets/img/lotto/l1.png') }}" alt="Product Image">
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
 
 <section style="margin-top: 60px;">
   <div class="container">
@@ -156,7 +203,7 @@
       <div class="col-lg-3 col-md-6 py-2">
         <div class="card icon-card py-2 pe-2">
           <div class="icon icon-shape rounded-circle bg-gradient-primary shadow text-center mt-3 mx-auto">
-            <i class="fas fa-ship opacity-10"></i>
+            <i class="fa fa-ticket mt-1 opacity-10"></i>
           </div>
           <div class="description text-center ps-3 mt-1">
             <p class="mb-1 text-bold">အီလက်ထရောနစ် လက်မှတ်</p>
@@ -168,7 +215,7 @@
       <div class="col-lg-3 col-md-6 py-2">
         <div class="card icon-card py-2 pe-2">
           <div class="icon icon-shape rounded-circle bg-gradient-primary shadow text-center mt-3 mx-auto">
-            <i class=" fas fa-ship opacity-10"></i>
+            <i class=" ni ni-trophy opacity-10"></i>
           </div>
           <div class="description text-center ps-3 mt-1">
             <p class="mb-1 text-bold">စိတ်ကြိုက်နံပါတ်</p>
@@ -180,7 +227,7 @@
       <div class="col-lg-3 col-md-6 py-2">
         <div class="card icon-card py-2 pe-2">
           <div class="icon icon-shape rounded-circle bg-gradient-primary shadow text-center mt-3 mx-auto">
-            <i class=" fas fa-ship opacity-10"></i>
+            <i class=" fa mt-1 fa-shield opacity-10"></i>
           </div>
           <div class="description text-center ps-3 mt-1">
             <p class="mb-1 text-bold">၁၀၀% စိတ်ချရမှု</p>
@@ -192,7 +239,7 @@
       <div class="col-lg-3 col-md-6 py-2">
         <div class="card icon-card py-2 pe-2">
           <div class="icon icon-shape rounded-circle bg-gradient-primary shadow text-center mt-3 mx-auto">
-            <i class=" fas fa-ship opacity-10"></i>
+            <i class=" ni ni-like-2 opacity-10"></i>
           </div>
           <div class="description text-center ps-3 mt-1">
             <p class="mb-1 text-bold">ဆုမဲပေါက်စဉ်</p>
@@ -204,34 +251,7 @@
   </div>
 </section>
 
-<section class="py-sm-5" id="download-soft-ui">
-  <div class="bg-gradient-dark position-relative m-3 border-radius-xl overflow-hidden">
-    <img src="{{ asset('user_app/assets/img/shapes/pattern-lines.svg')}}" alt="pattern-lines" class="position-absolute start-0 top-md-0 w-100 opacity-6">
-    <div class="container py-5 postion-relative z-index-2 position-relative">
-      <div class="row">
-        <div class="col-md-7 mx-auto text-center">
-          <!-- <h3 class="text-white mb-0">Do you love this awesome</h3> -->
-          <h3 class="text-primary text-gradient-primary mb-4">Delight 2D | 3D System</h3>
-          <p class="text-white mb-4">Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure itaque quo facere, commodi voluptatibus perspiciatis placeat nihil.</p>
-          <!-- <a href="https://www.creative-tim.com/product/soft-ui-design-system" class="btn btn-primary btn-lg mb-3 mb-sm-0">Download HTML</a> -->
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!-- 
-<section>
-  <div class="container custom-icon">
-    <div class="row">
-      <div class="col-lg-6">
-        <a href="#" class="custom-fab fab fa-viber"></a>
-        <a href="#" class="custom-fab fab fa-telegram"></a>
-        <i class="fa fa-long-arrow-right" style="font-size: 50px;"></i>
-        <a href="" class="custom-fab fa fa-usd"></a>
-      </div>
-    </div>
-  </div>
-</section> -->
+
 
 
 

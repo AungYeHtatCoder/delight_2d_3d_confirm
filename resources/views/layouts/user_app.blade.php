@@ -4,7 +4,7 @@
 <body class="presentation-page">
  <!-- Navbar -->
  @include('layouts.user_navbar')
- @include('layouts.user_header')
+ <!-- @include('layouts.user_header') -->
  {{-- @include('layouts.show_user_count') --}}
  <section>
   <div class="">

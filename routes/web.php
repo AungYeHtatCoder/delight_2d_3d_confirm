@@ -38,6 +38,10 @@ Route::get('/user_fillmoney', [App\Http\Controllers\User\WelcomeController::clas
 Route::get('/user_login', [App\Http\Controllers\User\WelcomeController::class, 'userLogin']);
 Route::get('/user_register', [App\Http\Controllers\User\WelcomeController::class, 'userRegister']);
 Route::get('/winner_lists', [App\Http\Controllers\User\WelcomeController::class, 'winnerList']);
+Route::get('/lottery_result', [App\Http\Controllers\User\WelcomeController::class, 'lotteryResult']);
+Route::get('/contact', [App\Http\Controllers\User\WelcomeController::class, 'contact']);
+
+
 
 
 

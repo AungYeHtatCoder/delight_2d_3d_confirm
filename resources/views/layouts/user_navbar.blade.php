@@ -3,7 +3,7 @@
     <div class="col-12">
       <nav class="navbar navbar-expand-lg  blur blur-rounded top-0 z-index-fixed shadow position-absolute my-3 py-2 start-0 end-0 mx-4">
         <div class="container-fluid px-0">
-          <a class="navbar-brand font-weight-bolder ms-sm-3" href="{{ url('/') }}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
+          <a class="navbar-brand font-weight-bolder text-primary text-gradient-primary ms-sm-3" href="{{ url('/') }}" rel="tooltip" title="Designed and Coded by Creative Tim" data-placement="bottom">
             Delight 2D | 3D System
           </a>
           <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
@@ -15,22 +15,22 @@
           </button>
           <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
             <ul class="navbar-nav navbar-nav-hover ms-lg-12 ps-lg-5 w-100">
-              <li class="nav-item dropdown dropdown-hover mx-2">
+              <!-- <li class="nav-item dropdown dropdown-hover mx-2">
                 <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="javascript:;" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
                   Service
                 </a>
-              </li>
+              </li> -->
 
               <li class="nav-item dropdown dropdown-hover mx-2">
-                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="javascript:;" id="dropdownMenuBlocks" data-bs-toggle="dropdown" aria-expanded="false">
-                  Contact
+                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="{{ url('/lottery_result') }}" id="dropdownMenuBlocks">
+                  Lottery Result
                 </a>
 
               </li>
 
               <li class="nav-item dropdown dropdown-hover mx-2">
-                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="javascript:;" id="dropdownMenuDocs" data-bs-toggle="dropdown" aria-expanded="false">
-                  About
+                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="{{ url('/contact') }}" id="dropdownMenuDocs">
+                  Contact
                 </a>
               </li>
 

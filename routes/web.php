@@ -40,6 +40,10 @@ Route::get('/user_fillmoney', [App\Http\Controllers\User\WelcomeController::clas
 Route::get('/user_login', [App\Http\Controllers\User\WelcomeController::class, 'userLogin']);
 Route::get('/user_register', [App\Http\Controllers\User\WelcomeController::class, 'userRegister']);
 Route::get('/winner_lists', [App\Http\Controllers\User\WelcomeController::class, 'winnerList']);
+Route::get('/lottery_result', [App\Http\Controllers\User\WelcomeController::class, 'lotteryResult']);
+Route::get('/contact', [App\Http\Controllers\User\WelcomeController::class, 'contact']);
+
+
 
 
 
@@ -55,6 +59,11 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Co
     // Users
     Route::delete('users/destroy', [UsersController::class, 'massDestroy'])->name('users.massDestroy');
     Route::resource('users', UsersController::class);
+
+    //Banners
+    Route::resource('banners', BannerController::class);
+
+
     // profile resource rotues
     Route::resource('profiles', ProfileController::class);
     // user profile route get method

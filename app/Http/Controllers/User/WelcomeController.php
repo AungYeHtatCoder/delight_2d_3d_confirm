@@ -2,13 +2,14 @@
 
 namespace App\Http\Controllers\User;
 
-use App\Http\Controllers\Controller;
+use GuzzleHttp\Client;
+use App\Models\Admin\Banner;
 use Illuminate\Http\Request;
 use App\Models\Admin\Lottery;
 use App\Models\Admin\TwoDigit;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
-use GuzzleHttp\Client;
 use Illuminate\Support\Facades\Http;
 use GuzzleHttp\Exception\RequestException;
 
@@ -55,6 +56,7 @@ class WelcomeController extends Controller
 
     public function index()
     {
+        $banners = Banner::latest()->take(3)->get();
         //$twoDigits = TwoDigit::all();
         $client = new Client();
 
@@ -69,7 +71,7 @@ class WelcomeController extends Controller
             return response()->json($data);
         }
 
-        return view('welcome', compact('data'));
+        return view('welcome', compact('data', 'banners'));
     }
 
 
@@ -206,5 +208,15 @@ class WelcomeController extends Controller
     public function winnerList()
     {
         return view('winner_lists');
+    }
+
+    public function lotteryResult()
+    {
+        return view('lottery_result');
+    }
+
+    public function contact()
+    {
+        return view('contact');
     }
 }

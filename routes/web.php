@@ -9,7 +9,9 @@ use App\Http\Controllers\Admin\PlayTwoDController;
 use App\Http\Controllers\Admin\TwoDigitController;
 use App\Http\Controllers\Admin\PermissionController;
 use App\Http\Controllers\Admin\TwoDWinnerController;
+use App\Http\Controllers\Admin\FillBalanceController;
 use App\Http\Controllers\Admin\TwoDLotteryController;
+use App\Http\Controllers\Admin\FillBalanceReplyController;
 use App\Http\Controllers\Admin\TwoDEveningWinnerController;
 
 /*
@@ -33,7 +35,7 @@ Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/', [App\Http\Controllers\User\WelcomeController::class, 'index'])->name('welcome');
-Route::get('/user_profile', [App\Http\Controllers\User\WelcomeController::class, 'userProfile']);
+//Route::get('/user_profile', [App\Http\Controllers\User\WelcomeController::class, 'userProfile']);
 Route::get('/user_fillmoney', [App\Http\Controllers\User\WelcomeController::class, 'userFillMoney']);
 Route::get('/user_login', [App\Http\Controllers\User\WelcomeController::class, 'userLogin']);
 Route::get('/user_register', [App\Http\Controllers\User\WelcomeController::class, 'userRegister']);
@@ -55,18 +57,21 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Co
     Route::resource('users', UsersController::class);
     // profile resource rotues
     Route::resource('profiles', ProfileController::class);
-    Route::put('/change-password', [ProfileController::class, 'changePassword'])->name('changePassword');
+    // user profile route get method
+    Route::put('/change-password', [ProfileController::class, 'newPassword'])->name('changePassword');
     // PhoneAddressChange route with auth id route with put method
     Route::put('/change-phone-address', [ProfileController::class, 'PhoneAddressChange'])->name('changePhoneAddress');
     Route::put('/change-kpay-no', [ProfileController::class, 'KpayNoChange'])->name('changeKpayNo');
     Route::put('/change-join-date', [ProfileController::class, 'JoinDate'])->name('addJoinDate');
     Route::resource('play-twod', PlayTwoDController::class);
-    Route::resource('two-d-lotteries', TwoDigitController::class);
+    //Route::resource('two-d-lotteries', TwoDigitController::class);
+    Route::get('/two-d-lotteries', [App\Http\Controllers\Admin\TwoDigitController::class, 'index'])->name('GetTwoDigit');
     Route::post('/two-d-play', [App\Http\Controllers\Admin\TwoDPlayController::class, 'store'])->name('two-d-play.store');
     Route::resource('twod-records', TwoDLotteryController::class);
     Route::resource('tow-d-win-number', TwoDWinnerController::class);
     Route::resource('tow-d-morning-number', TwoDMorningController::class);
     Route::get('/two-d-morning-winner', [App\Http\Controllers\Admin\TwoDMorningWinnerController::class, 'TwoDMorningWinner'])->name('morningWinner');
+    
     Route::get('/two-d-evening-number', [App\Http\Controllers\Admin\TwoDMorningController::class, 'EveningTwoD'])->name('eveningNumber');
 
     Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDMorningController::class, 'TwoDEveningWinner'])->name('eveningWinner');
@@ -75,4 +80,40 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Co
     Route::get('profile/fill_money', [ProfileController::class, 'fillmoney']);
     // kpay fill money get route
     Route::get('profile/kpay_fill_money', [ProfileController::class, 'index'])->name('kpay_fill_money');
+    Route::resource('fill-balance-replies', FillBalanceReplyController::class);
+
+});
+
+
+Route::group(['prefix' => 'user', 'as' => 'user.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth']], function () {
+Route::get('user-profile', [ProfileController::class, 'UserProfile'])->name('UserProfile');
+    // kpay route get method
+    Route::get('user-kpay-fill-money', [FillBalanceController::class, 'UserKpayFillMoney'])->name('UserKpayFillMoney');
+    // kpay fill money post method
+    Route::post('user-kpay-fill-money', [FillBalanceController::class, 'StoreKpayFillMoney'])->name('StoreKpayFillMoney');
+
+    Route::get('user-cbpay-fill-money', [FillBalanceController::class, 'UserCBPayFillMoney'])->name('UserCBPayFillMoney');
+    
+    Route::post('user-cbpay-fill-money', [FillBalanceController::class, 'StoreCBpayFillMoney'])->name('StoreCBpayFillMoney');
+
+    Route::get('user-wavepay-fill-money', [FillBalanceController::class, 'UserWavePayFillMoney'])->name('UserWavePayFillMoney');
+    
+    Route::post('user-wavepay-fill-money', [FillBalanceController::class, 'StoreWavepayFillMoney'])->name('StoreWavepayFillMoney');
+
+    Route::get('user-aya-pay-fill-money', [FillBalanceController::class, 'UserAYAPayFillMoney'])->name('UserAYAPayFillMoney');
+    
+    Route::post('user-aya-pay-fill-money', [FillBalanceController::class, 'StoreAYApayFillMoney'])->name('StoreAYApayFillMoney');
+});
+
+
+// Route::group(['prefix' => 'two-d-play', 'as' => 'two-d-play.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth', 'lottery.available']], function () {
+//     //Route::post('lotteries-two-d-play', TwoDigitController::class);
+//     Route::post('lotteries-two-d-play', [TwoDigitController::class, 'store'])->name('StorePlayTwoD');
+
+// });
+
+Route::group(['prefix' => 'two-d-play', 'as' => 'two-d-play.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth']], function () {
+    Route::post('lotteries-two-d-play', [TwoDigitController::class, 'store'])->middleware('lottery.available')->name('StorePlayTwoD');
+
+    // ... any other routes you might have for this group that do not need the 'lottery.available' middleware
 });

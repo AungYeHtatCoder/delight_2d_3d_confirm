@@ -22,7 +22,7 @@ class TwoDMorningController extends Controller
         $query->where('is_active', true);
     })->whereHas('twoDigitsMorning')->get();
     $prize_no_morning = TwodWiner::whereDate('created_at', Carbon::today())
-                                  ->whereBetween('created_at', [Carbon::now()->startOfDay()->addHours(6), Carbon::now()->startOfDay()->addHours(13)])
+                                  ->whereBetween('created_at', [Carbon::now()->startOfDay()->addHours(6), Carbon::now()->startOfDay()->addHours(12)])
                                  ->orderBy('id', 'desc')
                                   ->first();
     $prize_no = TwodWiner::whereDate('created_at', Carbon::today())->orderBy('id', 'desc')->first();
@@ -38,7 +38,7 @@ class TwoDMorningController extends Controller
 public function EveningTwoD()
 {
     // Check if the current day is a playing day
-    $playDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday'];
+    $playDays = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
     if (!in_array(strtolower(date('l')), $playDays)) {
         // Return an error or a message that today is not a playing day
         return redirect()->back()->with('error', 'Today is not a playing day.');

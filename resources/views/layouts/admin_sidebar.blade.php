@@ -297,9 +297,9 @@
             </a>
           </li>
           <li class="nav-item ">
-            <a class="nav-link text-white " href="../../pages/applications/validation.html">
+            <a class="nav-link text-white " href="{{ route('admin.fill-balance-replies.index') }}">
               <span class="sidenav-mini-icon"> V </span>
-              <span class="sidenav-normal  ms-2  ps-1"> Validation </span>
+              <span class="sidenav-normal  ms-2  ps-1"> Balance Accept </span>
             </a>
           </li>
         </ul>

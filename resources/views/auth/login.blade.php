@@ -20,13 +20,27 @@
          <div class="mb-3">
           <input type="email" name="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
          </div>
+         @if ($errors->has('email'))
+    <div class="alert alert-danger mb-3">
+        {{ $errors->first('email') }}
+    </div>
+@endif
+
          <div class="mb-3">
           <input type="password" name="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
          </div>
-         <!-- <div class="form-check form-switch">
+         @if ($errors->has('password'))
+    <div class="alert alert-danger mb-3">
+
+        {{ $errors->first('password') }}
+    </div>
+@endif
+
+         
+          {{-- <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" id="rememberMe">
           <label class="form-check-label" for="rememberMe">Remember me</label>
-         </div> -->
+         </div>  --}}
          <div class="text-center">
           <button type="submit" class="btn btn-lg bg-gradient-primary btn-lg w-100 mt-4 mb-0">Log in</button>
          </div>
@@ -35,7 +49,7 @@
        <div class="card-footer text-center pt-0 px-lg-2 px-1">
         <p class="mb-4 text-sm mx-auto">
          Don't have an account?
-         <a href="{{ url('/user_register') }}" class="text-primary text-gradient font-weight-bold">Register</a>
+         <a href="{{ route('register') }}" class="text-primary text-gradient font-weight-bold">Register</a>
         </p>
        </div>
       </div>

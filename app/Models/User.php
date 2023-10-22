@@ -9,6 +9,7 @@ use App\Models\Admin\Event;
 use App\Models\Admin\Lottery;
 use App\Models\Admin\TwodWiner;
 use App\Models\Admin\Permission;
+use App\Models\Admin\FillBalance;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Hash;
 use App\Models\Admin\LotteryTwoDigit;
@@ -141,5 +142,9 @@ public function twodWiners()
         return $this->save();
     }
    
+    public function fillBalances()
+    {
+        return $this->hasMany(FillBalance::class);
+    }
 
 }

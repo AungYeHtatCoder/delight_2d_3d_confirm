@@ -34,7 +34,19 @@ class ProfileController extends Controller
     }
         //return view('admin.profile.index');
     }
+    //UserProfile
+    public function UserProfile()
+    {
+        if (auth()->user()->hasRole('Admin')) {
+            $user = User::find(Auth::user()->id);
+            return view('admin.profile.admin_profile', compact('user'));
 
+    } else {
+            $user = User::find(Auth::user()->id);
+            return view('user_profile', compact('user'));
+    }
+        //return view('admin.profile.index');
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -106,6 +118,24 @@ class ProfileController extends Controller
 
     return redirect()->back()->with('toast_success', 'Profile updated successfully');
 }
+// new password change function
+    public function newPassword(Request $request)
+    {
+        //dd($request->all());
+        $request->validate([
+            'password' => 'required|min:8',
+
+        ]);
+
+        $user = User::find(Auth::user()->id);
+
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        return redirect()->back()->with('toast_success', "Customer Password has been Updated.");
+
+    }
 
 
     // password change function

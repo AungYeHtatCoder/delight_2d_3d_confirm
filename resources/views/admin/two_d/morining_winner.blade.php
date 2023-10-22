@@ -71,22 +71,15 @@
                                             <td><span class="badge badge-success">WINNER</span></td>
                                             <td>{{ $twoDigit->pivot->sub_amount * 85 }}</td>
                                             <td>
-                                                @if (!$twoDigit->pivot->prize_sent)
-                                                    <form
-                                                        action="{{ route('admin.tow-d-morning-number.update', $lottery->id) }}"
-                                                        method="post">
-                                                        @csrf
-                                                        @method('PUT')
-                                                        <input type="hidden" name="lottery_id" value="{{ $lottery->id }}">
-                                                        <input type="hidden" name="two_digit_id"
-                                                            value="{{ $twoDigit->id }}">
-                                                        <input type="hidden" name="amount"
-                                                            value="{{ $twoDigit->pivot->sub_amount * 85 }}">
-                                                        <button type="submit" class="btn btn-success">Send</button>
-                                                    </form>
+
+                                                @if ($twoDigit->pivot->prize_sent == 1)
+                                                    <button type="button" class="btn btn-success" disabled>Sent - လျော်ပြီး</button>
                                                 @else
-                                                    <button type="button" class="btn btn-success" disabled>Sent</button>
+                                                    <button type="button" class="btn btn-danger" disabled>Not Send
+                                                        {{ $twoDigit->pivot->prize_sent }}</button>
                                                 @endif
+
+
                                             </td>
                                         </tr>
                                     @endif

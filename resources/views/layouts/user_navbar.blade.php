@@ -44,21 +44,39 @@
               </li>
               <li class="nav-item dropdown dropdown-hover ms-2 ms-lg-0">
                 <a href="{{ url('/user_profile') }}" class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" id="dropdownMenuPages5" data-bs-toggle="dropdown" aria-expanded="false">
-                  Profile
+                  Account
                   <img src="{{ asset('user_app/assets/img/down-arrow-dark.svg') }}" alt="down-arrow" class="arrow ms-1">
                 </a>
                 <div class="dropdown-menu dropdown-menu-animation dropdown-md p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages5">
-                  <div class="d-none d-lg-block">
-                    <a href="{{ url('/user_register') }}" class="dropdown-item border-radius-md">
-                      <span class="ps-3">Register</span>
-                    </a>
-                    <a href="{{ url('/user_login') }}" class="dropdown-item border-radius-md">
-                      <span class="ps-3">Log In</span>
-                    </a>
-                    <a href="../../pages/author.html" class="dropdown-item border-radius-md">
-                      <span class="ps-3">Log Out</span>
-                    </a>
-                  </div>
+                 <div class="d-none d-lg-block">
+
+    @if(Auth::check()) <!-- If the user is logged in -->
+
+        <a href="{{ route('user.UserProfile') }}" class="dropdown-item border-radius-md">
+            <span class="ps-3">Profile</span>
+        </a>
+        
+        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item border-radius-md">
+            {{-- <span class="sidenav-mini-icon"> L </span> --}}
+            <span class="sidenav-normal ms-2 ps-1">Logout</span>
+        </a>
+        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+            @csrf
+        </form>
+
+    @else <!-- If the user is NOT logged in -->
+
+        <a href="{{ url('/user_register') }}" class="dropdown-item border-radius-md">
+            <span class="ps-3">Register</span>
+        </a>
+        <a href="{{ route('login') }}" class="dropdown-item border-radius-md">
+            <span class="ps-3">Log In</span>
+        </a>
+
+    @endif
+
+</div>
+
                   <div class="d-lg-none mb-0">
                     <a href="../../pages/about-us.html" class="dropdown-item border-radius-md">
                       <span class="ps-3">About Us</span>

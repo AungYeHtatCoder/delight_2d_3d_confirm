@@ -130,7 +130,7 @@
             @endforeach
           </div>
 
-        <form action="{{ route('admin.two-d-lotteries.store') }}" method="post">
+        <form action="{{ route('two-d-play.StorePlayTwoD.store') }}" method="post">
           @csrf
           <div class="row">
             <div class="col-md-6 mt-4">

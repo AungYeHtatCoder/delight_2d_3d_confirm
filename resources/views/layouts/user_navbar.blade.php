@@ -35,7 +35,7 @@
               </li>
 
               <li class="nav-item my-auto ms-3 ms-lg-0">
-                <a href="{{ url('/winner_lists') }}" class="btn btn-sm btn-outline-primary btn-round mb-0 me-1 mt-2 mt-md-0">Winner Lists</a>
+                <a href="{{ route('user.two-d-winners-history.getWinners') }}" class="btn btn-sm btn-outline-primary btn-round mb-0 me-1 mt-2 mt-md-0">Winner Lists</a>
               </li>
               <li class="nav-item my-auto ms-3 ms-lg-0">
 
@@ -52,7 +52,7 @@
 
     @if(Auth::check()) <!-- If the user is logged in -->
 
-        <a href="{{ route('user.UserProfile') }}" class="dropdown-item border-radius-md">
+        <a href="{{ route('home') }}" class="dropdown-item border-radius-md">
             <span class="ps-3">Profile</span>
         </a>
         

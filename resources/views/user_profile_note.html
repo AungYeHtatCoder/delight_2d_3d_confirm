@@ -1,0 +1,60 @@
+<table class="table align-items-center mb-0">
+    <thead>
+        <tr>
+            <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+            >
+                ID
+            </th>
+            <th
+                class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2"
+            >
+                2D
+            </th>
+            <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+            >
+                Sub-Amount
+            </th>
+            <th
+                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"
+            >
+                TotalAmount
+            </th>
+            <th class="text-secondary opacity-7">Date</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach($morningDigits as $index => $digit)
+        <tr>
+            <td>
+                <div class="d-flex px-2 py-1">
+                    <div class="d-flex flex-column justify-content-center">
+                        <h6 class="mb-0 text-xs">{{ $index + 1 }}</h6>
+                    </div>
+                </div>
+            </td>
+            <td>
+                <p class="text-xs font-weight-bold mb-0">
+                    {{ $digit->two_digit }}
+                </p>
+            </td>
+            <td class="align-middle text-center text-sm">
+                <p class="text-xs font-weight-bold mb-0">
+                    {{ $digit->pivot->sub_amount }}
+                </p>
+            </td>
+            <td class="align-middle text-center">
+                <span class="text-secondary text-xs font-weight-bold">
+                    {{ $digit->total_amount }}
+                </span>
+            </td>
+            <td>
+                <p class="text-xs font-weight-bold mb-0">
+                    {{ $digit->pivot->created_at->format('d M Y (l) (h:i a)') }}
+                </p>
+            </td>
+        </tr>
+        @endforeach
+    </tbody>
+</table>

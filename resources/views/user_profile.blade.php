@@ -122,6 +122,54 @@
                                                 </div>
                                             </form>
                                         </div>
+                                        <hr>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Morning Session Played 2 Digit</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                
+<div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">2D</th>
+          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sub-Amount</th>
+          <th class="text-secondary opacity-7">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($morningDigits['two_digits'] as $index => $digit)
+        <tr>
+          <td>
+            <div class="d-flex px-2 py-1">
+              
+              <div class="d-flex flex-column justify-content-center">
+                <h6 class="mb-0 text-xs">{{ $index + 1 }}</h6>              
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">{{ $digit->two_digit }}</p>          
+          </td>
+          <td class="align-middle text-center text-sm">
+            <p class="text-xs font-weight-bold mb-0">{{ $digit->pivot->sub_amount }}</p>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">
+   {{ $digit->pivot->created_at->format('d M Y (l) (h:i a)') }}
+
+            </p>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+     <p class="text-right">Total Amount for Morning: <strong>{{ $morningDigits['total_amount'] }}</strong></p>
+  </div>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-lg-6">
                                         <div class="card" id="password">
@@ -186,6 +234,54 @@
                                             </form>
 
                                         </div>
+                                        <hr>
+                                        <div class="card">
+                                            <div class="card-header">
+                                                <h5>Evening Session Played 2 Digit</h5>
+                                            </div>
+                                            <div class="card-body">
+                                                <div class="table-responsive">
+    <table class="table align-items-center mb-0">
+      <thead>
+        <tr>
+          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">ID</th>
+          <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">2D</th>
+          <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Sub-Amount</th>
+          <th class="text-secondary opacity-7">Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        @foreach($eveningDigits['two_digits'] as $index => $digit)
+        <tr>
+          <td>
+            <div class="d-flex px-2 py-1">
+              
+              <div class="d-flex flex-column justify-content-center">
+                <h6 class="mb-0 text-xs">{{ $index + 1 }}</h6>              
+              </div>
+            </div>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">{{ $digit->two_digit }}</p>          
+          </td>
+          <td class="align-middle text-center text-sm">
+            <p class="text-xs font-weight-bold mb-0">{{ $digit->pivot->sub_amount }}</p>
+          </td>
+          <td>
+            <p class="text-xs font-weight-bold mb-0">
+   {{ $digit->pivot->created_at->format('d M Y (l) (h:i a)') }}
+
+            </p>
+          </td>
+        </tr>
+        @endforeach
+      </tbody>
+    </table>
+     <p class="text-right">Total Amount for Evening Session: <strong>{{ $eveningDigits['total_amount'] }}</strong></p>
+  </div>
+
+                                            </div>
+                                        </div>
                                     </div>
 
                                 </div>
@@ -197,7 +293,7 @@
                     <div class="container py-4">
                         <div class="row">
                             <div class="card mx-2">
-                                <h5 class="text-center">Accounts</h5>
+                                <h5 class="text-center">Fill Account's Balance</h5>
                                 <div class="d-flex">
                                     <a href="javascript:;" class="mt-3 ms-4">
                                         <img class="avatar avatar-l shadow"
@@ -205,9 +301,9 @@
                                     </a>
                                     <div class="mt-3 ms-2">
                                         <!-- <p class="text-sm mb-0 text-capitalize">User Name</p> -->
-                                        <h6 class="mb-0">
+                                        {{-- <h6 class="mb-0">
                                             091234567
-                                        </h6>
+                                        </h6> --}}
                                         <a href="{{ route('user.UserKpayFillMoney') }}"
                                             class="text-primary text-sm icon-move-right my-auto">Fill
                                             Money
@@ -223,9 +319,9 @@
                                     </a>
                                     <div class="ms-2">
                                         <!-- <p class="text-sm mb-0 text-capitalize">User Name</p> -->
-                                        <h6 class="mb-0">
+                                        {{-- <h6 class="mb-0">
                                             091234567
-                                        </h6>
+                                        </h6> --}}
                                         <a href="{{ route('user.UserWavePayFillMoney') }}"
                                             class="text-primary text-sm icon-move-right my-auto">Fill
                                             Money
@@ -240,9 +336,9 @@
                                     </a>
                                     <div class="ms-2">
                                         <!-- <p class="text-sm mb-0 text-capitalize">User Name</p> -->
-                                        <h6 class="mb-0">
+                                        {{-- <h6 class="mb-0">
                                             091234567
-                                        </h6>
+                                        </h6> --}}
                                         <a href="{{ route('user.UserCBPayFillMoney') }}"
                                             class="text-primary text-sm icon-move-right my-auto">Fill
                                             Money
@@ -257,9 +353,9 @@
                                     </a>
                                     <div class="ms-2">
                                         <!-- <p class="text-sm mb-0 text-capitalize">User Name</p> -->
-                                        <h6 class="mb-0">
+                                        {{-- <h6 class="mb-0">
                                             091234567
-                                        </h6>
+                                        </h6> --}}
                                         <a href="{{ url('/user_fillmoney') }}"
                                             class="text-primary text-sm icon-move-right my-auto">Fill
                                             Money
@@ -274,9 +370,9 @@
                                     </a>
                                     <div class="ms-2">
                                         <!-- <p class="text-sm mb-0 text-capitalize">User Name</p> -->
-                                        <h6 class="mb-0">
+                                        {{-- <h6 class="mb-0">
                                             091234567
-                                        </h6>
+                                        </h6> --}}
                                         <a href="{{ route('user.UserAYAPayFillMoney') }}"
                                             class="text-primary text-sm icon-move-right my-auto">Fill
                                             Money
@@ -291,9 +387,9 @@
                                     </a>
                                     <div class="ms-2">
                                         <!-- <p class="text-sm mb-0 text-capitalize">User Name</p> -->
-                                        <h6 class="mb-0">
+                                        {{-- <h6 class="mb-0">
                                             091234567
-                                        </h6>
+                                        </h6> --}}
                                         <a href="{{ url('/user_fillmoney') }}"
                                             class="text-primary text-sm icon-move-right my-auto">Fill
                                             Money
@@ -308,9 +404,9 @@
                                     </a>
                                     <div class="ms-2">
                                         <!-- <p class="text-sm mb-0 text-capitalize">User Name</p> -->
-                                        <h6 class="mb-0">
+                                        {{-- <h6 class="mb-0">
                                             091234567
-                                        </h6>
+                                        </h6> --}}
                                         <a href="{{ url('/user_fillmoney') }}"
                                             class="text-primary text-sm icon-move-right my-auto">Fill
                                             Money

@@ -34,7 +34,7 @@ class PlayTwoDController extends Controller
     }
     $lottery_matches = LotteryMatch::where('id', 1)->whereNotNull('is_active')->first();
 
-    return view('note_play_twod', compact('twoDigits', 'remainingAmounts', 'lottery_matches'));
+    return view('play_twod', compact('twoDigits', 'remainingAmounts', 'lottery_matches'));
 }
 
 

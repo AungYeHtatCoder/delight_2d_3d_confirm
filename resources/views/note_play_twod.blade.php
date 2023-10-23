@@ -116,51 +116,47 @@
   </div>
 </header>
 <div class="container">
-<div class="row align-items-center">
-  <div class="col-lg-10 mx-auto">
-    <div class="row justify-content-center">
-      <div class="col-md-11">
-        <div class="info">
-          <div class="icon icon-sm">
-            {{-- 1 --}}
-          </div>
-          <div class="d-flex">
-            <h5 class="font-weight-bolder mt-3">Delight 2D - {{ Auth::user()->name }} 's account balance -
-              <span id="userBalance" data-balance="{{ Auth::user()->balance }}">{{ Auth::user()->balance }} MMK</span>
-            </h5>
-            <div class="mt-3 ms-4">
-              <a href="{{ route('user.UserProfile') }}" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-md-0">Fill
-                Balance</a>
+  <div class="row align-items-center">
+    <div class="col-lg-10 mx-auto">
+      <div class="row justify-content-center">
+        <div class="col-md-11">
+          <div class="info">
+            <div class="icon icon-sm">
+              {{-- 1 --}}
             </div>
+            <div class="d-flex">
+              <h5 class="font-weight-bolder mt-3">Delight 2D - {{ Auth::user()->name }} 's account balance -
+                <span id="userBalance" data-balance="{{ Auth::user()->balance }}">{{ Auth::user()->balance }} MMK</span>
+              </h5>
+              <div class="mt-3 ms-4">
+                <a href="{{ url('/user_profile') }}" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-md-0">Fill
+                  Balance</a>
+              </div>
+            </div>
+
+            <div class="scrollable-container mt-5">
+              @foreach($twoDigits->chunk(5) as $chunk)
+              <div class="row beauty">
+                @foreach($chunk as $digit)
+                @php
+                $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+                ->where('two_digit_id', $digit->id)
+                ->sum('sub_amount');
+                @endphp
+
+                @if($totalBetAmountForTwoDigit < 5000) <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
+                  {{ $digit->two_digit }}
+              </div>
+              @else
+              <div class="col-2 text-center digit disabled" style="background-color: {{ 'javascript:getRandomColor();' }}" onclick="alert('This two digit\'s amount limit is full.')">
+                {{ $digit->two_digit }}
+              </div>
+              @endif
+              @endforeach
+            </div>
+            @endforeach
           </div>
-
-          <div class="scrollable-container mt-2">
-    @foreach($twoDigits->chunk(5) as $chunk)
-    <div class="row beauty">
-        @foreach($chunk as $digit)
-        @php
-        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
-        ->where('two_digit_id', $digit->id)
-        ->sum('sub_amount');
-        @endphp
-
-        @if($totalBetAmountForTwoDigit < 5000)
-        <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
-            {{ $digit->two_digit }} 
-            <small class="d-block mt-1" style="font-size: 10px">ထိုးနိုင်သောပမာဏ - {{ $remainingAmounts[$digit->id] }}</small>
-        </div>
-        @else
-        <div class="col-2 text-center digit disabled" style="background-color: {{ 'javascript:getRandomColor();' }}" onclick="showLimitFullAlert()">
-    {{ $digit->two_digit }}
-</div>
-
-        @endif
-        @endforeach
-    </div>
-    @endforeach
-</div>
-
-        @if($lottery_matches->is_active == 1)
+          @if($lottery_matches->is_active == 1)
         <form action="{{ route('admin.two-d-play.store') }}" method="post">
           @csrf
           <div class="row">
@@ -183,53 +179,32 @@
           </div>
           <!-- Add this right above your PlayNow & Close buttons in the modal-body -->
 
-        </form>
-        @else
-        <p>
-          <h3 class="text-center">Sorry, you can't play now. Please wait for the next round.</h3>
-        </p>
-        @endif
+          </form>
+          @else
+          <p>
+            <h3 class="text-center">Sorry, you can't play now. Please wait for the next round.</h3>
+          </p>
+          @endif
+
+        </div>
       </div>
+
     </div>
 
   </div>
+</div>
 
-</div>
 {{-- add more col --}}
-</div>
 </div>
 @endsection
 @section('user_scripts')
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.all.min.js"></script>
 <script>
- function showLimitFullAlert() {
-    Swal.fire({
-        icon: 'info',
-        title: 'Limit Reached',
-        text: 'This two digit\'s amount limit is full.'
-    });
-}
-function selectDigit(num, element) {
+  function selectDigit(num, element) {
     const selectedInput = document.getElementById('selected_digits');
     const amountInputsDiv = document.getElementById('amountInputs');
     let selectedDigits = selectedInput.value ? selectedInput.value.split(",") : [];
-
-    // Get the remaining amount for the selected digit
-    const remainingAmount = Number(element.querySelector('small').innerText.split(' ')[1]);
-
-    // Check if the user tries to bet more than the remaining amount
-    if (selectedDigits.includes(num)) {
-        const betAmountInput = document.getElementById('amount_' + num);
-        if (Number(betAmountInput.value) > remainingAmount) {
-            Swal.fire({
-                icon: 'error',
-                title: 'Bet Limit Exceeded',
-                text: `You can only bet up to ${remainingAmount} for the digit ${num}.`
-            });
-            return;
-        }
-    }
 
     // Check if the digit is already selected
     if (selectedDigits.includes(num)) {
@@ -251,114 +226,12 @@ function selectDigit(num, element) {
       amountInput.setAttribute('min', '100');
       amountInput.setAttribute('max', '5000');
       amountInput.setAttribute('class', 'form-control mt-2');
-      amountInput.onchange = function() {
-          updateTotalAmount();
-          checkBetAmount(this, num);
-      };
+      amountInput.onchange = updateTotalAmount; // Add this line to call the total update function
       amountInputsDiv.appendChild(amountInput);
     }
-}
 
-//   function selectDigit(num, element) {
-//     const selectedInput = document.getElementById('selected_digits');
-//     const amountInputsDiv = document.getElementById('amountInputs');
-//     let selectedDigits = selectedInput.value ? selectedInput.value.split(",") : [];
-
-//     // Get the remaining amount for the selected digit
-//     const remainingAmount = Number(element.querySelector('small').innerText.split(' ')[1]);
-
-//     // Check if the user tries to bet more than the remaining amount
-//     if (selectedDigits.includes(num)) {
-//         const betAmountInput = document.getElementById('amount_' + num);
-//         if (Number(betAmountInput.value) > remainingAmount) {
-//             Swal.fire({
-//                 icon: 'error',
-//                 title: 'Bet Limit Exceeded',
-//                 text: `You can only bet up to ${remainingAmount} for the digit ${num}.`
-//             });
-//             return;
-//         }
-//     }
-
-//     // Check if the digit is already selected
-//     if (selectedDigits.includes(num)) {
-//       // If it is, remove the digit, its style, and its input field
-//       selectedInput.value = selectedInput.value.replace(num, '').replace(',,', ',').replace(/^,|,$/g, '');
-//       element.classList.remove('selected');
-//       const inputToRemove = document.getElementById('amount_' + num);
-//       amountInputsDiv.removeChild(inputToRemove);
-//     } else {
-//       // Otherwise, add the digit, its style, and its input field
-//       selectedInput.value = selectedInput.value ? selectedInput.value + "," + num : num;
-//       element.classList.add('selected');
-
-//       const amountInput = document.createElement('input');
-//       amountInput.setAttribute('type', 'number');
-//       amountInput.setAttribute('name', 'amounts[' + num + ']');
-//       amountInput.setAttribute('id', 'amount_' + num);
-//       amountInput.setAttribute('placeholder', 'Amount for ' + num);
-//       amountInput.setAttribute('min', '100');
-//       amountInput.setAttribute('max', '5000');
-//       amountInput.setAttribute('class', 'form-control mt-2');
-//       amountInput.onchange = updateTotalAmount; // Add this line to call the total update function
-//       amountInputsDiv.appendChild(amountInput);
-//     }
-
-//     //updateTotalAmount();
-//     amountInput.onchange = function() {
-//     updateTotalAmount();
-//     checkBetAmount(this, num);  // Add this line
-// };
-
-//   }
-function checkBetAmount(inputElement, num) {
-    // Replace the problematic line with the following code
-    const digits = document.querySelectorAll('.digit');
-    let digitElement = null;
-
-    for(let i = 0; i < digits.length; i++) {
-        if(digits[i].textContent.includes(num)) {
-            digitElement = digits[i];
-            break;
-        }
-    }
-
-    // Ensure that the digitElement was found before proceeding
-    if(!digitElement) {
-        console.error('Could not find the digit element for', num);
-        return;
-    }
-
-    // Continue with the rest of your function as before
-    const remainingAmount = Number(digitElement.querySelector('small').innerText.split(' ')[1]);
-
-    // Check if the entered bet amount exceeds the remaining amount
-    if (Number(inputElement.value) > remainingAmount) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Bet Limit Exceeded',
-            text: `You can only bet up to ${remainingAmount} for the digit ${num}.`
-        });
-        inputElement.value = "";  // Reset the input value
-    }
-}
-
-//   function checkBetAmount(inputElement, num) {
-//     // Get the remaining amount for the selected digit
-//     const digitElement = document.querySelector(`.digit:contains('${num}')`);
-//     const remainingAmount = Number(digitElement.querySelector('small').innerText.split(' ')[1]);
-
-//     // Check if the entered bet amount exceeds the remaining amount
-//     if (Number(inputElement.value) > remainingAmount) {
-//         Swal.fire({
-//             icon: 'error',
-//             title: 'Bet Limit Exceeded',
-//             text: `You can only bet up to ${remainingAmount} for the digit ${num}.`
-//         });
-//         inputElement.value = "";  // Reset the input value
-//     }
-// }
-
+    updateTotalAmount();
+  }
 
   // New function to calculate and display the total amount
   function updateTotalAmount() {

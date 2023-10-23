@@ -43,87 +43,8 @@ class TwoDigitController extends Controller
      * Store a newly created resource in storage.
      */
 
-public function store(Request $request)
-{
-    $validatedData = $request->validate([
-        'selected_digits' => 'required|string',
-        'amounts' => 'required|array',
-        'amounts.*' => 'required|integer|min:100|max:5000',
-        'totalAmount' => 'required|integer|min:100',
-        'user_id' => 'required|exists:users,id',
-    ]);
-
-    // Working days check
-    $workingDays = [1, 2, 3, 4, 5];
-    $day = Carbon::now()->dayOfWeek;
-    if (!in_array($day, $workingDays)) {
-        return redirect()->back()->with('error', 'Today is not a working day.');
-    }
-
-    // Determine the session
-    $currentSession = date('H') < 12 ? 'morning' : 'evening';  // before 1 pm is morning
-
-    // Check for specific times when the store is not available
-    $morningCloseStart = Carbon::createFromTime(11, 30, 0);
-    $morningCloseEnd = Carbon::createFromTime(12, 0, 0);
-    $eveningCloseStart = Carbon::createFromTime(15, 45, 0);
-    $eveningCloseEnd = Carbon::createFromTime(16, 0, 0);
-    $now = Carbon::now();
-    if (($now->between($morningCloseStart, $morningCloseEnd)) || ($now->between($eveningCloseStart, $eveningCloseEnd))) {
-        return redirect()->back()->with('error', 'This session is closed. Please try again later.');
-    }
-
-    DB::beginTransaction();
-
-    try {
-        // Deduct the total amount from the user's balance
-        $user = Auth::user();
-        $user->balance -= $request->totalAmount;
-
-        // Check if user balance is negative after deduction
-        if ($user->balance < 0) {
-            throw new \Exception('Your balance is not enough.');
-        }
-
-        // Update user balance in the database
-        $user->save();
-
-        $lottery = Lottery::create([
-            'pay_amount' => $request->totalAmount,
-            'total_amount' => $request->totalAmount,
-            'user_id' => $request->user_id,
-            'session' => $currentSession
-        ]);
-
-        $attachData = [];
-        foreach($request->amounts as $two_digit_id => $sub_amount) {
-            $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
-                    ->join('lotteries', 'lotteries.id', '=', 'lottery_two_digit_pivot.lottery_id')
-                    ->where('two_digit_id', $two_digit_id)
-                    ->where('lotteries.session', $currentSession)
-                    ->sum('sub_amount');
-
-            if($totalBetAmountForTwoDigit + $sub_amount > 5000) {
-                $twoDigit = TwoDigit::find($two_digit_id);
-                throw new \Exception("The two-digit's amount limit for {$twoDigit->two_digit} is full.");
-            }
-            $attachData[$two_digit_id] = ['sub_amount' => $sub_amount];
-        }
-
-        $lottery->twoDigits()->attach($attachData);
-
-        DB::commit();
-
-        return redirect()->back()->with('message', 'Data stored successfully!');
-    } catch (\Exception $e) {
-        DB::rollback();
-        return redirect()->back()->with('error', $e->getMessage());
-    }
-}
-
-//     public function store(Request $request)
+// public function store(Request $request)
 // {
-//     //dd($request->all());
 //     $validatedData = $request->validate([
 //         'selected_digits' => 'required|string',
 //         'amounts' => 'required|array',
@@ -132,7 +53,25 @@ public function store(Request $request)
 //         'user_id' => 'required|exists:users,id',
 //     ]);
 
+//     // Working days check
+//     $workingDays = [1, 2, 3, 4, 5];
+//     $day = Carbon::now()->dayOfWeek;
+//     if (!in_array($day, $workingDays)) {
+//         return redirect()->back()->with('error', 'Today is not a working day.');
+//     }
+
+//     // Determine the session
 //     $currentSession = date('H') < 12 ? 'morning' : 'evening';  // before 1 pm is morning
+
+//     // Check for specific times when the store is not available
+//     $morningCloseStart = Carbon::createFromTime(11, 30, 0);
+//     $morningCloseEnd = Carbon::createFromTime(12, 0, 0);
+//     $eveningCloseStart = Carbon::createFromTime(15, 45, 0);
+//     $eveningCloseEnd = Carbon::createFromTime(16, 0, 0);
+//     $now = Carbon::now();
+//     if (($now->between($morningCloseStart, $morningCloseEnd)) || ($now->between($eveningCloseStart, $eveningCloseEnd))) {
+//         return redirect()->back()->with('error', 'This session is closed. Please try again later.');
+//     }
 
 //     DB::beginTransaction();
 
@@ -181,6 +120,67 @@ public function store(Request $request)
 //         return redirect()->back()->with('error', $e->getMessage());
 //     }
 // }
+
+    public function store(Request $request)
+{
+    //dd($request->all());
+    $validatedData = $request->validate([
+        'selected_digits' => 'required|string',
+        'amounts' => 'required|array',
+        'amounts.*' => 'required|integer|min:100|max:5000',
+        'totalAmount' => 'required|integer|min:100',
+        'user_id' => 'required|exists:users,id',
+    ]);
+
+    $currentSession = date('H') < 12 ? 'morning' : 'evening';  // before 1 pm is morning
+
+    DB::beginTransaction();
+
+    try {
+        // Deduct the total amount from the user's balance
+        $user = Auth::user();
+        $user->balance -= $request->totalAmount;
+
+        // Check if user balance is negative after deduction
+        if ($user->balance < 0) {
+            throw new \Exception('Your balance is not enough.');
+        }
+
+        // Update user balance in the database
+        $user->save();
+
+        $lottery = Lottery::create([
+            'pay_amount' => $request->totalAmount,
+            'total_amount' => $request->totalAmount,
+            'user_id' => $request->user_id,
+            'session' => $currentSession
+        ]);
+
+        $attachData = [];
+        foreach($request->amounts as $two_digit_id => $sub_amount) {
+            $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+                    ->join('lotteries', 'lotteries.id', '=', 'lottery_two_digit_pivot.lottery_id')
+                    ->where('two_digit_id', $two_digit_id)
+                    ->where('lotteries.session', $currentSession)
+                    ->sum('sub_amount');
+
+            if($totalBetAmountForTwoDigit + $sub_amount > 5000) {
+                $twoDigit = TwoDigit::find($two_digit_id);
+                throw new \Exception("The two-digit's amount limit for {$twoDigit->two_digit} is full.");
+            }
+            $attachData[$two_digit_id] = ['sub_amount' => $sub_amount];
+        }
+
+        $lottery->twoDigits()->attach($attachData);
+
+        DB::commit();
+
+        return redirect()->back()->with('message', 'Data stored successfully!');
+    } catch (\Exception $e) {
+        DB::rollback();
+        return redirect()->back()->with('error', $e->getMessage());
+    }
+}
 
 //     public function store(Request $request)
 // {

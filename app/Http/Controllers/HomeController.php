@@ -3,7 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use App\Models\Users;
+use App\Models\User;
 class HomeController extends Controller
 {
     /**
@@ -21,12 +21,18 @@ class HomeController extends Controller
      *
      * @return \Illuminate\Contracts\Support\Renderable
      */
-    public function index()
-    {
-         if (auth()->user()->hasRole('Admin')) {
+    public function index() {
+    if (auth()->user()->hasRole('Admin')) {
         return view('admin.dashboard');
     } else {
-        return view('user_profile');
-        }
+        $userId = auth()->id(); // Get logged in user's ID
+        $playedMorningTwoDigits = User::getUserMorningTwoDigits($userId);
+        $playedEveningTwoDigits = User::getUserEveningTwoDigits($userId);
+        return view('user_profile', [
+            'morningDigits' => $playedMorningTwoDigits,
+            'eveningDigits' => $playedEveningTwoDigits,
+        ]);
     }
+}
+
 }

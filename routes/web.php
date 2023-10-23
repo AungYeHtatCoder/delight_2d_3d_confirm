@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\FillBalanceController;
 use App\Http\Controllers\Admin\TwoDLotteryController;
 use App\Http\Controllers\Admin\FillBalanceReplyController;
 use App\Http\Controllers\Admin\TwoDEveningWinnerController;
+use App\Http\Controllers\Admin\TwoDWinnerHistoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -116,6 +117,7 @@ Route::get('user-profile', [ProfileController::class, 'UserProfile'])->name('Use
     Route::get('user-aya-pay-fill-money', [FillBalanceController::class, 'UserAYAPayFillMoney'])->name('UserAYAPayFillMoney');
     
     Route::post('user-aya-pay-fill-money', [FillBalanceController::class, 'StoreAYApayFillMoney'])->name('StoreAYApayFillMoney');
+    Route::get('/two-d-winners-history', [TwoDWinnerHistoryController::class, 'getWinners'])->name('two-d-winners-history.getWinners');
 });
 
 

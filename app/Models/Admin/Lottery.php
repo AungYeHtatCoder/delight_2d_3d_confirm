@@ -19,6 +19,8 @@ class Lottery extends Model
         'session',
         'lottery_match_id'
     ];
+    protected $dates = ['created_at', 'updated_at'];
+
         public function user()
     {
         return $this->belongsTo(User::class, 'user_id');
@@ -37,7 +39,7 @@ class Lottery extends Model
     {
         $morningStart = Carbon::now()->startOfDay()->addHours(6);
         $morningEnd = Carbon::now()->startOfDay()->addHours(12);
-        return $this->belongsToMany(TwoDigit::class, 'lottery_two_digit_pivot', 'lottery_id', 'two_digit_id')->withPivot('sub_amount', 'prize_sent')
+        return $this->belongsToMany(TwoDigit::class, 'lottery_two_digit_pivot', 'lottery_id', 'two_digit_id')->withPivot('sub_amount', 'prize_sent', 'created_at')
                     ->wherePivotBetween('created_at', [$morningStart, $morningEnd]);
     }
 
@@ -45,7 +47,7 @@ class Lottery extends Model
     {
         $eveningStart = Carbon::now()->startOfDay()->addHours(12);
         $eveningEnd = Carbon::now()->startOfDay()->addHours(24);
-        return $this->belongsToMany(TwoDigit::class, 'lottery_two_digit_pivot', 'lottery_id', 'two_digit_id')->withPivot('sub_amount', 'prize_sent')
+        return $this->belongsToMany(TwoDigit::class, 'lottery_two_digit_pivot', 'lottery_id', 'two_digit_id')->withPivot('sub_amount', 'prize_sent', 'created_at')
                     ->wherePivotBetween('created_at', [$eveningStart, $eveningEnd]);
     }
 }

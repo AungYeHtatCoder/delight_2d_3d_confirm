@@ -1,5 +1,12 @@
 @include('layouts.user_head')
 @yield('user_styles')
+<style>
+ body {
+  width: 100vw;
+  overflow-x: hidden;
+
+ }
+</style>
 
 <body class="presentation-page">
  <!-- Navbar -->

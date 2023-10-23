@@ -15,17 +15,16 @@
           </button>
           <div class="collapse navbar-collapse pt-3 pb-2 py-lg-0 w-100" id="navigation">
             <ul class="navbar-nav navbar-nav-hover ms-lg-12 ps-lg-5 w-100">
-              <!-- <li class="nav-item dropdown dropdown-hover mx-2">
-                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="javascript:;" id="dropdownMenuPages" data-bs-toggle="dropdown" aria-expanded="false">
-                  Service
-                </a>
-              </li> -->
 
               <li class="nav-item dropdown dropdown-hover mx-2">
                 <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="{{ url('/lottery_result') }}" id="dropdownMenuBlocks">
-                  Lottery Result
+                  LotteryResult
                 </a>
-
+              </li>
+              <li class="nav-item dropdown dropdown-hover mx-2">
+                <a class="nav-link ps-2 d-flex justify-content-between cursor-pointer align-items-center" href="{{ url('/service') }}" id="dropdownMenuDocs">
+                  Service
+                </a>
               </li>
 
               <li class="nav-item dropdown dropdown-hover mx-2">
@@ -48,45 +47,61 @@
                   <img src="{{ asset('user_app/assets/img/down-arrow-dark.svg') }}" alt="down-arrow" class="arrow ms-1">
                 </a>
                 <div class="dropdown-menu dropdown-menu-animation dropdown-md p-3 border-radius-lg mt-0 mt-lg-3" aria-labelledby="dropdownMenuPages5">
-                 <div class="d-none d-lg-block">
+                  <div class="d-none d-lg-block">
 
-    @if(Auth::check()) <!-- If the user is logged in -->
+                    @if(Auth::check()) <!-- If the user is logged in -->
 
-        <a href="{{ route('home') }}" class="dropdown-item border-radius-md">
-            <span class="ps-3">Profile</span>
-        </a>
-        
-        <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item border-radius-md">
-            {{-- <span class="sidenav-mini-icon"> L </span> --}}
-            <span class="sidenav-normal ms-2 ps-1">Logout</span>
-        </a>
-        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-            @csrf
-        </form>
+                    <a href="{{ route('home') }}" class="dropdown-item border-radius-md">
+                      <span class="ps-3">Profile</span>
+                    </a>
 
-    @else <!-- If the user is NOT logged in -->
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item border-radius-md">
+                      {{-- <span class="sidenav-mini-icon"> L </span> --}}
+                      <span class="sidenav-normal ms-2 ps-1">Logout</span>
+                    </a>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                    </form>
 
-        <a href="{{ url('/user_register') }}" class="dropdown-item border-radius-md">
-            <span class="ps-3">Register</span>
-        </a>
-        <a href="{{ route('login') }}" class="dropdown-item border-radius-md">
-            <span class="ps-3">Log In</span>
-        </a>
+                    @else <!-- If the user is NOT logged in -->
 
-    @endif
+                    <a href="{{ route('register') }}" class="dropdown-item border-radius-md">
+                      <span class="ps-3">Register</span>
+                    </a>
+                    <a href="{{ route('login') }}" class="dropdown-item border-radius-md">
+                      <span class="ps-3">Log In</span>
+                    </a>
 
-</div>
+                    @endif
+
+                  </div>
 
                   <div class="d-lg-none mb-0">
-                    <a href="../../pages/about-us.html" class="dropdown-item border-radius-md">
-                      <span class="ps-3">About Us</span>
+                    @if(Auth::check()) <!-- If the user is logged in -->
+
+                    <a href="{{ route('home') }}" class="dropdown-item border-radius-md">
+                      <span class="ps-3">Profile</span>
                     </a>
-                    <a href="{{ url('/user_login') }}" class="dropdown-item border-radius-md">
-                      <span class="ps-3">Contact Us</span>
+
+                    <a href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();" class="dropdown-item border-radius-md">
+                      {{-- <span class="sidenav-mini-icon"> L </span> --}}
+                      <span class="sidenav-normal ms-2 ps-1">Logout</span>
                     </a>
-                    <a href="../../pages/author.html" class="dropdown-item border-radius-md">
-                      <span class="ps-3">Author</span>
+                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                      @csrf
+                    </form>
+
+                    @else <!-- If the user is NOT logged in -->
+
+                    <a href="{{ route('register') }}" class="dropdown-item border-radius-md">
+                      <span class="ps-3">Register</span>
                     </a>
+                    <a href="{{ route('login') }}" class="dropdown-item border-radius-md">
+                      <span class="ps-3">Log In</span>
+                    </a>
+
+                    @endif
+
                   </div>
               </li>
             </ul>

@@ -219,4 +219,14 @@ class WelcomeController extends Controller
     {
         return view('contact');
     }
+
+    public function service()
+    {
+        return view('service');
+    }
+
+    public function userRequestMoney()
+    {
+        return view('request_money');
+    }
 }

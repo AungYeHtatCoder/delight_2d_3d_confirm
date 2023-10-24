@@ -21,7 +21,8 @@ class TwoDMorningWinnerController extends Controller
                                  ->whereBetween('created_at', [Carbon::now()->startOfDay()->addHours(6), Carbon::now()->startOfDay()->addHours(12)])
                                  ->orderBy('id', 'desc')
                                  ->first();
-    $prize_no = TwodWiner::whereDate('created_at', Carbon::today())->orderBy('id', 'desc')->first();
+   
+                                 $prize_no = TwodWiner::whereDate('created_at', Carbon::today())->orderBy('id', 'desc')->first();
     return view('admin.two_d.morining_winner', compact('lotteries', 'prize_no_morning', 'prize_no'));
 }
 

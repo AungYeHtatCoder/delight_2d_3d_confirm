@@ -26,7 +26,7 @@ class PlayTwoDController extends Controller
     // Calculate remaining amounts for each two-digit
     $remainingAmounts = [];
     foreach ($twoDigits as $digit) {
-        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_copy')
             ->where('two_digit_id', $digit->id)
             ->sum('sub_amount');
 

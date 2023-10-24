@@ -308,8 +308,14 @@
               <span class="sidenav-normal  ms-2  ps-1"> CloseTwoD </span>
             </a>
           </li>
+          <li class="nav-item ">
+            <a class="nav-link text-white " href="{{ route('admin.SessionResetIndex') }}">
+              <span class="sidenav-mini-icon"> V </span>
+              <span class="sidenav-normal  ms-2  ps-1"> SessionReset</span>
+            </a>
+          </li>
         </ul>
-      </div>
+      </div> SessionResetIndex
     </li>
     {{-- end lottery --}}
     <!--

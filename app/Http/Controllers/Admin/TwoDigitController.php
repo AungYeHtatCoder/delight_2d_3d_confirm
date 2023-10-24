@@ -9,6 +9,7 @@ use App\Models\Admin\TwoDigit;
 use App\Models\Admin\LotteryMatch;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\LotteryTwoDigitPivot;
 use Illuminate\Support\Facades\Auth;
 
 class TwoDigitController extends Controller
@@ -121,9 +122,9 @@ class TwoDigitController extends Controller
 //     }
 // }
 
-    public function store(Request $request)
+// new copies 
+public function store(Request $request)
 {
-    //dd($request->all());
     $validatedData = $request->validate([
         'selected_digits' => 'required|string',
         'amounts' => 'required|array',
@@ -132,21 +133,18 @@ class TwoDigitController extends Controller
         'user_id' => 'required|exists:users,id',
     ]);
 
-    $currentSession = date('H') < 12 ? 'morning' : 'evening';  // before 1 pm is morning
+    $currentSession = date('H') < 12 ? 'morning' : 'evening';
 
     DB::beginTransaction();
 
     try {
-        // Deduct the total amount from the user's balance
         $user = Auth::user();
         $user->balance -= $request->totalAmount;
 
-        // Check if user balance is negative after deduction
         if ($user->balance < 0) {
             throw new \Exception('Your balance is not enough.');
         }
 
-        // Update user balance in the database
         $user->save();
 
         $lottery = Lottery::create([
@@ -156,22 +154,25 @@ class TwoDigitController extends Controller
             'session' => $currentSession
         ]);
 
-        $attachData = [];
-        foreach($request->amounts as $two_digit_id => $sub_amount) {
+        foreach ($request->amounts as $two_digit_id => $sub_amount) {
             $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
-                    ->join('lotteries', 'lotteries.id', '=', 'lottery_two_digit_pivot.lottery_id')
-                    ->where('two_digit_id', $two_digit_id)
-                    ->where('lotteries.session', $currentSession)
-                    ->sum('sub_amount');
+                ->join('lotteries', 'lotteries.id', '=', 'lottery_two_digit_pivot.lottery_id')
+                ->where('two_digit_id', $two_digit_id)
+                ->where('lotteries.session', $currentSession)
+                ->sum('sub_amount');
 
-            if($totalBetAmountForTwoDigit + $sub_amount > 5000) {
+            if ($totalBetAmountForTwoDigit + $sub_amount > 5000) {
                 $twoDigit = TwoDigit::find($two_digit_id);
                 throw new \Exception("The two-digit's amount limit for {$twoDigit->two_digit} is full.");
             }
-            $attachData[$two_digit_id] = ['sub_amount' => $sub_amount];
-        }
 
-        $lottery->twoDigits()->attach($attachData);
+            $pivot = new LotteryTwoDigitPivot();
+            $pivot->lottery_id = $lottery->id;
+            $pivot->two_digit_id = $two_digit_id;
+            $pivot->sub_amount = $sub_amount;
+            $pivot->prize_sent = false;
+            $pivot->save();
+        }
 
         DB::commit();
 
@@ -181,6 +182,68 @@ class TwoDigitController extends Controller
         return redirect()->back()->with('error', $e->getMessage());
     }
 }
+
+
+//     public function store(Request $request)
+// {
+//     //dd($request->all());
+//     $validatedData = $request->validate([
+//         'selected_digits' => 'required|string',
+//         'amounts' => 'required|array',
+//         'amounts.*' => 'required|integer|min:100|max:5000',
+//         'totalAmount' => 'required|integer|min:100',
+//         'user_id' => 'required|exists:users,id',
+//     ]);
+
+//     $currentSession = date('H') < 12 ? 'morning' : 'evening';  // before 1 pm is morning
+
+//     DB::beginTransaction();
+
+//     try {
+//         // Deduct the total amount from the user's balance
+//         $user = Auth::user();
+//         $user->balance -= $request->totalAmount;
+
+//         // Check if user balance is negative after deduction
+//         if ($user->balance < 0) {
+//             throw new \Exception('Your balance is not enough.');
+//         }
+
+//         // Update user balance in the database
+//         $user->save();
+
+//         $lottery = Lottery::create([
+//             'pay_amount' => $request->totalAmount,
+//             'total_amount' => $request->totalAmount,
+//             'user_id' => $request->user_id,
+//             'session' => $currentSession
+//         ]);
+
+//         $attachData = [];
+//         foreach($request->amounts as $two_digit_id => $sub_amount) {
+//             $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+//                     ->join('lotteries', 'lotteries.id', '=', 'lottery_two_digit_pivot.lottery_id')
+//                     ->where('two_digit_id', $two_digit_id)
+//                     ->where('lotteries.session', $currentSession)
+//                     ->sum('sub_amount');
+
+//             if($totalBetAmountForTwoDigit + $sub_amount > 5000) {
+//                 $twoDigit = TwoDigit::find($two_digit_id);
+//                 throw new \Exception("The two-digit's amount limit for {$twoDigit->two_digit} is full.");
+//             }
+//             $attachData[$two_digit_id] = ['sub_amount' => $sub_amount];
+//         }
+
+//         $lottery->twoDigits()->attach($attachData);
+
+//         DB::commit();
+
+//         return redirect()->back()->with('message', 'Data stored successfully!');
+//     } catch (\Exception $e) {
+//         DB::rollback();
+//         return redirect()->back()->with('error', $e->getMessage());
+//     }
+// }
 
 //     public function store(Request $request)
 // {

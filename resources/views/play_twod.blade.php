@@ -139,7 +139,7 @@
     <div class="row beauty">
         @foreach($chunk as $digit)
         @php
-        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_copy')
         ->where('two_digit_id', $digit->id)
         ->sum('sub_amount');
         @endphp

@@ -44,6 +44,10 @@ Route::get('/winner_lists', [App\Http\Controllers\User\WelcomeController::class,
 Route::get('/lottery_result', [App\Http\Controllers\User\WelcomeController::class, 'lotteryResult']);
 Route::get('/contact', [App\Http\Controllers\User\WelcomeController::class, 'contact']);
 
+Route::get('/service', [App\Http\Controllers\User\WelcomeController::class, 'service']);
+
+
+Route::get('/user_requestmoney', [App\Http\Controllers\User\WelcomeController::class, 'userRequestMoney']);
 
 
 
@@ -90,37 +94,36 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'App\Http\Co
     Route::resource('tow-d-win-number', TwoDWinnerController::class);
     Route::resource('tow-d-morning-number', TwoDMorningController::class);
     Route::get('/two-d-morning-winner', [App\Http\Controllers\Admin\TwoDMorningWinnerController::class, 'TwoDMorningWinner'])->name('morningWinner');
-    
+
     Route::get('/two-d-evening-number', [App\Http\Controllers\Admin\TwoDMorningController::class, 'EveningTwoD'])->name('eveningNumber');
 
     Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDMorningController::class, 'TwoDEveningWinner'])->name('eveningWinner');
-        Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDEveningWinnerController::class, 'TwoDEveningWinner'])->name('eveningWinner');
+    Route::get('/two-d-evening-winner', [App\Http\Controllers\Admin\TwoDEveningWinnerController::class, 'TwoDEveningWinner'])->name('eveningWinner');
 
     Route::get('profile/fill_money', [ProfileController::class, 'fillmoney']);
     // kpay fill money get route
     Route::get('profile/kpay_fill_money', [ProfileController::class, 'index'])->name('kpay_fill_money');
     Route::resource('fill-balance-replies', FillBalanceReplyController::class);
-
 });
 
 
 Route::group(['prefix' => 'user', 'as' => 'user.', 'namespace' => 'App\Http\Controllers\Admin', 'middleware' => ['auth']], function () {
-Route::get('user-profile', [ProfileController::class, 'UserProfile'])->name('UserProfile');
+    Route::get('user-profile', [ProfileController::class, 'UserProfile'])->name('UserProfile');
     // kpay route get method
     Route::get('user-kpay-fill-money', [FillBalanceController::class, 'UserKpayFillMoney'])->name('UserKpayFillMoney');
     // kpay fill money post method
     Route::post('user-kpay-fill-money', [FillBalanceController::class, 'StoreKpayFillMoney'])->name('StoreKpayFillMoney');
 
     Route::get('user-cbpay-fill-money', [FillBalanceController::class, 'UserCBPayFillMoney'])->name('UserCBPayFillMoney');
-    
+
     Route::post('user-cbpay-fill-money', [FillBalanceController::class, 'StoreCBpayFillMoney'])->name('StoreCBpayFillMoney');
 
     Route::get('user-wavepay-fill-money', [FillBalanceController::class, 'UserWavePayFillMoney'])->name('UserWavePayFillMoney');
-    
+
     Route::post('user-wavepay-fill-money', [FillBalanceController::class, 'StoreWavepayFillMoney'])->name('StoreWavepayFillMoney');
 
     Route::get('user-aya-pay-fill-money', [FillBalanceController::class, 'UserAYAPayFillMoney'])->name('UserAYAPayFillMoney');
-    
+
     Route::post('user-aya-pay-fill-money', [FillBalanceController::class, 'StoreAYApayFillMoney'])->name('StoreAYApayFillMoney');
     Route::get('/two-d-winners-history', [TwoDWinnerHistoryController::class, 'getWinners'])->name('two-d-winners-history.getWinners');
 });

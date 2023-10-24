@@ -3,7 +3,9 @@
 @section('user_styles')
 <style>
   .result {
-    background: #82A0D8;
+    background-image: url('<?php echo asset('user_app/assets/img/lotto/contact.jpg') ?>');
+    background-repeat: no-repeat;
+    background-size: cover;
   }
 
 
@@ -33,8 +35,14 @@
 
   .text-banner {
     position: absolute;
-    top: 200;
-    left: 200;
+    top: 170;
+    left: 250;
+  }
+
+  @media (max-width: 991px) {
+    .text-banner {
+      display: none;
+    }
   }
 </style>
 @endsection
@@ -65,14 +73,14 @@
     <div class="carousel-inner">
       @foreach($banners as $key=>$banner)
       <div class="carousel-item parent-banner {{ $loop->first ? 'active' : '' }}">
-        <img src="{{ $banner->img_url }}" class="d-block w-100" style="max-height: 500px;" alt="...">
+        <img src="{{ $banner->img_url }}" class="d-block w-100 opacity-8" style="max-height: 500px;" alt="...">
       </div>
       @endforeach
     </div>
   </div>
 </header>
 <section class="text-banner">
-  <h3 class="text-primary text-gradient">You Can Play 2D | 3D At</h3>
+  <h2 class="text-primary text-gradient">You Can Play 2D | 3D At</h2>
   <h4>Delight 2D | 3D System</h4>
   <!-- <p class="text-dark">Lorem ipsum dolor sit amet consectetur adipisicing elit. At quam doloremque cupiditate</p> -->
   <a href="{{ route('admin.play-twod.index') }}" class="btn mt-1 bg-gradient-primary btn-xl">PLAY NOW</a>
@@ -126,9 +134,9 @@
 <section class="mt-5">
   <div class="container">
     <h3 class="text-center">How To Start</h3>
-    <div class="row mt-4">
+    <div class="row mt-sm-2">
       <div class="col-lg-4 mx-auto">
-        <div class="card mt-5 mb-5 start-card p-4">
+        <div class="card mt-lg-5 mt-sm-3 mb-5 start-card p-4">
           <h2 style="color:#e2d4e7">01</h2>
           <img src="{{ asset('/user_app/assets/img/lotto/get.png') }}" width="90px" height="90px" style="display: block; margin: 0 auto;">
           <h5 class="text-center">Get Access</h5>
@@ -145,7 +153,7 @@
 
       </div>
       <div class="col-lg-4 mx-auto">
-        <div class="card mt-5 start-card p-4">
+        <div class="card mt-5 mb-3 start-card p-4">
           <h2 style="color:#e2d4e7">03</h2>
           <img src="{{ asset('/user_app/assets/img/lotto/start3.jpg') }}" width="100px" height="100px" style="display: block; margin: 0 auto;">
           <h5 class="text-center">Win Prizes</h5>
@@ -156,9 +164,9 @@
   </div>
 </section>
 
-<section class="py-sm-3" id="download-soft-ui">
-  <div class="position-relative m-3 border-radius-xl overflow-hidden result">
-    <img src="{{ asset('user_app/assets/img/shapes/waves-gray.svg')}}" alt="pattern-lines" class="position-absolute start-0 top-md-0 w-100 opacity-6">
+<section class="py-sm-3 mt-3" id="download-soft-ui">
+  <div class="position-relative w-100 overflow-hidden result">
+    <img src="{{ asset('user_app/assets/img/shapes/waves-gray.svg')}}" alt="pattern-lines" class="position-absolute start-0 top-md-0 w-100 opacity-4">
     <div class="container py-5 postion-relative z-index-2 position-relative">
       <div class="row">
         <div class="col-md-7 mx-auto text-center">
@@ -172,7 +180,7 @@
   </div>
 </section>
 
-<section class="my-3 mt-3">
+<section class="my-3 mt-4">
   <div class="container">
     <div class="row">
       <div class="col-md-6 col-12 my-auto">

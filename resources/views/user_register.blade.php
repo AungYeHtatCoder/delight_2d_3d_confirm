@@ -17,16 +17,19 @@
        <div class="card-body">
         <form role="form">
          <div class="mb-3">
-          <input type="text" class="form-control form-control-lg" placeholder="Name" aria-label="Name" aria-describedby="name-addon">
+          <input type="text" name="name" class="form-control form-control-lg" placeholder="Name" aria-label="Name" aria-describedby="name-addon">
          </div>
          <div class="mb-3">
-          <input type="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+          <input type="email" name="email" class="form-control form-control-lg" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
          </div>
          <div class="mb-3">
-          <input type="text" class="form-control form-control-lg" placeholder="Phone" aria-label="Phone" aria-describedby="phone-addon">
+          <input type="text" name="phone" class="form-control form-control-lg" placeholder="Phone" aria-label="Phone" aria-describedby="phone-addon">
          </div>
          <div class="mb-3">
-          <input type="email" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+          <input type="text" name="address" class="form-control form-control-lg" placeholder="Address" aria-label="Address" aria-describedby="phone-addon">
+         </div>
+         <div class="mb-3">
+          <input type="password" name="password" class="form-control form-control-lg" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
          </div>
          <!-- <div class="form-check form-switch">
           <input class="form-check-input" type="checkbox" id="rememberMe">

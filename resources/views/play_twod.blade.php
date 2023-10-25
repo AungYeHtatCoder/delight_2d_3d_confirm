@@ -124,25 +124,64 @@
             <div class="icon icon-sm">
               {{-- 1 --}}
             </div>
-            <div class="d-flex">
-              <h5 class="font-weight-bolder mt-3">Delight 2D - {{ Auth::user()->name }} 's account balance -
-                <span id="userBalance" data-balance="{{ Auth::user()->balance }}">{{ Auth::user()->balance }} MMK</span>
-              </h5>
-              <div class="mt-3 ms-4">
-                <a href="{{ route('user.UserProfile') }}" class="btn btn-sm bg-gradient-primary btn-round mb-0 me-1 mt-md-0">Fill
-                  Balance</a>
-              </div>
-            </div>
+          </div>
 
           <div class="scrollable-container mt-2">
     @foreach($twoDigits->chunk(5) as $chunk)
     <div class="row beauty">
         @foreach($chunk as $digit)
         @php
-        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_copy')
         ->where('two_digit_id', $digit->id)
         ->sum('sub_amount');
         @endphp
+
+        @if($totalBetAmountForTwoDigit < 5000)
+        <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
+            {{ $digit->two_digit }} 
+            <small class="d-block mt-1" style="font-size: 10px">ထိုးနိုင်သောပမာဏ - {{ $remainingAmounts[$digit->id] }}</small>
+        </div>
+        @else
+        <div class="col-2 text-center digit disabled" style="background-color: {{ 'javascript:getRandomColor();' }}" onclick="showLimitFullAlert()">
+    {{ $digit->two_digit }}
+</div>
+
+        @endif
+        @endforeach
+    </div>
+    @endforeach
+</div>
+
+        @if($lottery_matches->is_active == 1)
+        <form action="{{ route('admin.two-d-play.store') }}" method="post">
+          @csrf
+          <div class="row">
+            <div class="col-md-6 mt-4">
+              <input type="text" name="selected_digits" id="selected_digits" class="form-control">
+              <div id="amountInputs"></div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group mb-3">
+                <label for="totalAmount">Total Amount</label>
+                <input type="text" id="totalAmount" name="totalAmount" class="form-control" readonly>
+              </div>
+              <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
+              {{-- PlayNow & Close buttons --}}
+              <div class="modal-footer">
+                <button type="submit" class="btn bg-gradient-primary mx-3">playNow</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+              </div>
+            </div>
+
+            <div class="scrollable-container mt-2">
+              @foreach($twoDigits->chunk(5) as $chunk)
+              <div class="row beauty">
+                @foreach($chunk as $digit)
+                @php
+                $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+                ->where('two_digit_id', $digit->id)
+                ->sum('sub_amount');
+                @endphp
 
                 @if($totalBetAmountForTwoDigit < 5000) <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
                   {{ $digit->two_digit }}

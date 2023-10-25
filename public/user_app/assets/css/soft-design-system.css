@@ -4970,6 +4970,7 @@ fieldset:disabled .btn {
 
   .navbar-expand-lg .navbar-nav .dropdown-menu {
     position: absolute;
+    left: -40px;
   }
 
   .navbar-expand-lg .navbar-nav .nav-link {
@@ -4982,6 +4983,7 @@ fieldset:disabled .btn {
   }
 
   .navbar-expand-lg .navbar-collapse {
+    width: 70%;
     display: flex !important;
     flex-basis: auto;
   }
@@ -22361,6 +22363,7 @@ html {
 }
 
 .navbar .navbar-brand {
+  width: 30%;
   color: #344767;
 }
 

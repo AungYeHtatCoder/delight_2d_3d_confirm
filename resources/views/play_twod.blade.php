@@ -2,18 +2,55 @@
 @section('user_styles')
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.7.32/dist/sweetalert2.min.css">
 <style>
+/* --------------------
+        wave
+---------------------- */
+.parallax > use {
+  animation: move-forever 25s cubic-bezier(.55,.5,.45,.5)     infinite;
+}
+.parallax > use:nth-child(1) {
+  animation-delay: -2s;
+  animation-duration: 7s;
+}
+.parallax > use:nth-child(2) {
+  animation-delay: -3s;
+  animation-duration: 10s;
+}
+.parallax > use:nth-child(3) {
+  animation-delay: -4s;
+  animation-duration: 13s;
+}
+.parallax > use:nth-child(4) {
+  animation-delay: -5s;
+  animation-duration: 20s;
+}
+.waves-height {
+  width: 100%;
+  height: 100px;
+}
+@keyframes move-forever {
+  0% {
+   transform: translate3d(-90px,0,0);
+  }
+  100% { 
+    transform: translate3d(85px,0,0);
+  }
+}
+.coin-img {
+  width: 30px;
+  margin-right: 5px;
+}
+
+
+
+  .bg-darkblue {
+    background-color: #130a2b;
+  }
   .digit.selected {
     background-color: #007bff;
     color: white;
-    border-radius: 50%;
-    width: 2.2rem;
-    /* Reduced size */
-    height: 2.2rem;
-    /* Reduced size */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 2px solid #007bff;
+    background-image: linear-gradient(310deg, #cb0c9f 0%, darkorchid 100%);
+    border: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
     margin: 0 4px;
@@ -21,12 +58,12 @@
   }
 
   .digit {
-    border: 3px solid #7A316F;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     padding: 5px 0;
-    background-color: #1B6B93;
-    color: white;
-    border-radius: 8px;
+    background: linear-gradient(white, white) padding-box,
+    linear-gradient(to right, darkblue, darkorchid) border-box;
+    border-radius: 15px;
+    border: 3px solid transparent;
     font-size: 20px;
     font-weight: bold;
     transition: all 0.3s ease;
@@ -85,6 +122,31 @@
     overflow-y: auto;
     /* Enable vertical scrolling when content overflows */
   }
+  .account-box {
+    box-shadow: 0 6px 20px 0 rgb(0 0 0 / 19%);
+    padding: 10px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  .account-box h5,
+  .balance-btn .btn {
+    margin-bottom: 0;
+  }
+  
+  @media (max-width: 768px) {
+  .coin-img {
+    margin-left: 5px;
+  }
+  .waves-height {
+    height:40px;
+    min-height:40px;
+  }
+  .account-box h5 {
+    font-size: 14px;
+  }
+  
+}
+
 </style>
 @endsection
 @section('content')
@@ -98,7 +160,8 @@
         </div>
       </div>
     </div>
-    <div class="position-absolute w-100 z-index-1 bottom-0">
+    {{-- remove comment --}}
+     <div class="position-absolute w-100 z-index-1 bottom-0">
       <svg class="waves" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 24 150 40" preserveAspectRatio="none" shape-rendering="auto">
         <defs>
           <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
@@ -112,7 +175,20 @@
           <use xlink:href="#gentle-wave" x="48" y="16" fill="rgba(255,255,255,0.95" />
         </g>
       </svg>
-    </div>
+    </div> 
+    {{-- remove comment --}}
+    <svg class="position-absolute waves-height z-index-1 bottom-0" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+    viewBox="0 24 150 28" preserveAspectRatio="none" shape-rendering="auto">
+    <defs>
+    <path id="gentle-wave" d="M-160 44c30 0 58-18 88-18s 58 18 88 18 58-18 88-18 58 18 88 18 v44h-352z" />
+    </defs>
+    <g class="parallax">
+    <use xlink:href="#gentle-wave" x="48" y="0" fill="rgba(255,255,255,0.7" />
+    <use xlink:href="#gentle-wave" x="48" y="3" fill="rgba(255,255,255,0.5)" />
+    <use xlink:href="#gentle-wave" x="48" y="5" fill="rgba(255,255,255,0.3)" />
+    <use xlink:href="#gentle-wave" x="48" y="7" fill="#fff" />
+    </g>
+    </svg>
   </div>
 </header>
 <div class="container">
@@ -124,66 +200,27 @@
             <div class="icon icon-sm">
               {{-- 1 --}}
             </div>
-          </div>
-
-          <div class="scrollable-container mt-2">
-    @foreach($twoDigits->chunk(5) as $chunk)
-    <div class="row beauty">
-        @foreach($chunk as $digit)
-        @php
-        $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_copy')
-        ->where('two_digit_id', $digit->id)
-        ->sum('sub_amount');
-        @endphp
-
-        @if($totalBetAmountForTwoDigit < 5000)
-        <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
-            {{ $digit->two_digit }} 
-            <small class="d-block mt-1" style="font-size: 10px">ထိုးနိုင်သောပမာဏ - {{ $remainingAmounts[$digit->id] }}</small>
-        </div>
-        @else
-        <div class="col-2 text-center digit disabled" style="background-color: {{ 'javascript:getRandomColor();' }}" onclick="showLimitFullAlert()">
-    {{ $digit->two_digit }}
-</div>
-
-        @endif
-        @endforeach
-    </div>
-    @endforeach
-</div>
-
-        @if($lottery_matches->is_active == 1)
-        <form action="{{ route('admin.two-d-play.store') }}" method="post">
-          @csrf
-          <div class="row">
-            <div class="col-md-6 mt-4">
-              <input type="text" name="selected_digits" id="selected_digits" class="form-control">
-              <div id="amountInputs"></div>
-            </div>
-            <div class="col-md-6">
-              <div class="form-group mb-3">
-                <label for="totalAmount">Total Amount</label>
-                <input type="text" id="totalAmount" name="totalAmount" class="form-control" readonly>
-              </div>
-              <input type="hidden" name="user_id" value="{{ Auth::user()->id }}">
-              {{-- PlayNow & Close buttons --}}
-              <div class="modal-footer">
-                <button type="submit" class="btn bg-gradient-primary mx-3">playNow</button>
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <div class="account-box d-flex align-items-center justify-content-between">
+              <h5 class="font-weight-bolder">Delight 2D - {{ Auth::user()->name }} 's account balance -
+                <span id="userBalance" data-balance="{{ Auth::user()->balance }}">{{ Auth::user()->balance }} MMK</span>
+              </h5>
+              <div class="balance-btn">
+                <a href="{{ route('user.UserProfile') }}" class="btn btn-sm bg-gradient-primary"><img src="{{ asset('admin_app/assets/img/top-up.png')}}" alt="coin-img" class="coin-img">Fill
+                  Balance</a>
               </div>
             </div>
 
-            <div class="scrollable-container mt-2">
-              @foreach($twoDigits->chunk(5) as $chunk)
-              <div class="row beauty">
+            <div class="scrollable-container overflow-scroll mt-6">
+              @foreach($twoDigits->chunk(4) as $chunk)
+              <div class="row beauty d-flex justify-content-around ">
                 @foreach($chunk as $digit)
                 @php
-                $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_pivot')
+                $totalBetAmountForTwoDigit = DB::table('lottery_two_digit_copy')
                 ->where('two_digit_id', $digit->id)
                 ->sum('sub_amount');
                 @endphp
 
-                @if($totalBetAmountForTwoDigit < 5000) <div class="col-2 mx-auto text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
+                @if($totalBetAmountForTwoDigit < 5000) <div class="col-2 text-center digit" style="background-color: {{ 'javascript:getRandomColor();' }};" onclick="selectDigit('{{ $digit->two_digit }}', this)">
                   {{ $digit->two_digit }}
                   <small class="d-block" style="font-size: 10px">ထိုးနိုင်သောပမာဏ - {{ $remainingAmounts[$digit->id] }}</small>
               </div>
@@ -205,8 +242,6 @@
               <div class="col-md-6 mt-4">
                 <input type="text" name="selected_digits" id="selected_digits" class="form-control">
                 <div id="amountInputs"></div>
-              </div>
-              <div class="col-md-6">
                 <div class="form-group mb-3">
                   <label for="totalAmount">Total Amount</label>
                   <input type="text" id="totalAmount" name="totalAmount" class="form-control" readonly>
@@ -217,6 +252,9 @@
                   <button type="submit" class="btn bg-gradient-primary mx-3">playNow</button>
                   <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                 </div>
+              </div>
+              <div class="col-md-6">
+                
               </div>
             </div>
             <!-- Add this right above your PlayNow & Close buttons in the modal-body -->
